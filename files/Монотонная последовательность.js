@@ -88,6 +88,18 @@ function initDescr() {
 	        $a_n=n$, $n\\in N$
     </div>
 	<div class="form-group">
+		<input id="exp"  type="radio" name="sequence-type">
+		<label for="exp">Экспотенциальная последовательность</label>
+    </div>
+    <div class="sequence" data-sequence-type="exp">
+        $a_n = \\exp(-b n)$, $n \\in N, b \\in \\mathbb{R}$
+        <label for="b-input" >$b$</label>
+        <input type="text" id="b-input" value="0.5">
+    </div>
+    <div class="form-group">
+        <div class="header">Пример немонотонной последовательности</div>
+    </div>
+    <div class="form-group">
 		<input id="sin"  type="radio" name="sequence-type">
 		<label for="sin">Синусоидальная последовательность</label>
     </div>
@@ -98,16 +110,6 @@ function initDescr() {
 		    <input type="text" id="omega-input" value="1.0">
 	    </div>
     </div>
-	<div class="form-group">
-		<input id="exp"  type="radio" name="sequence-type">
-		<label for="exp">Экспотенциальная последовательность</label>
-    </div>
-    <div class="sequence" data-sequence-type="exp">
-        $a_n = \\exp(-b n)$, $n \\in N, b \\in \\mathbb{R}$
-        <div class="flex-align-items">
-        <label for="b-input" >$b$</label>
-        <input type="text" id="b-input" value="0.5">
-    </div>
 </form>
 
 <div class="flex-align-items">
@@ -116,6 +118,7 @@ function initDescr() {
 </div>
 
 <br><br>
+<div class="sequence">
 <div class="header">Выберите тип отображения:</div> 
 <form name="form-display-type">
 	<div class="form-group">

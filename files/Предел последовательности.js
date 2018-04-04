@@ -5,7 +5,8 @@ let displayType = "numercal-axis";
 
 const a = 2;
 let n = 10,
-    epsilon = 3.0,
+    epsilon = 3,
+    // epsilon = Math.abs(Math.pow(-1, n) / n),
     epsMin = a - epsilon,
     epsMax = a + epsilon;
 
@@ -94,7 +95,7 @@ function initDescr() {
 	</div>	
 	<div class="form-group">
 		<label for="epsilon-input" >$\\epsilon$</label>
-		<input id="epsilon-input" type="text" value="${epsilon}">
+        <input id="epsilon-input" type="text" value="${epsilon}" disabled>
 	</div>
 </form>
 
@@ -111,8 +112,8 @@ function initDescr() {
     $("#execute-builds").click(function(e) {
         displayType = $("form[name=form-display-type] :checked").attr("id");
         n = parseInt($("#n-input").val());
-        epsilon = +$("#epsilon-input").val();
-        points[0].coord1[0] = a - epsilon;
+        // epsilon = +$("#epsilon-input").val();
+        points[0].coord1[0] = a - epsilon;          
         points[1].coord1[0] = a + epsilon;
 
         animate = $("input[name=animation-turn]").is(":checked");
