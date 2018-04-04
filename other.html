@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <title>other</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <style>
+        .content {
+            background: #fff;
+            color: #373737;
+            border: 1px solid #CCC
+        }
+
+        .content>div {
+            display: none;
+            padding: 10px 15px 5px
+        }
+
+        .main input {
+            display: none;
+        }
+
+        label {
+            display: inline-block;
+            padding: 5px 10px;
+            font-weight: 600;
+            text-align: center;
+            background-color: #eee;
+            border: 1px solid #CCC;
+            bottom: -1px;
+            position: relative;
+        }
+
+        label:hover {
+            cursor: pointer
+        }
+
+        input:checked+label {
+            background: #fff;
+            border-bottom: 1px solid #fff
+        }
+
+        #tab1:checked~.content #examples {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <input id="tab1" type="radio" name="tabs" checked>
+        <label for="tab1">Примеры</label>
+        <div class="content">
+            <div id="examples">
+                <a href="index.html?file=Трёхмерное векторное поле">Трёхмерное векторное поле</a>
+                <br/>
+                <a href="index.html?file=Линии уровня плоского скалярного поля">Линии уровня плоского скалярного поля</a>
+                <br/>
+                <a href="index.html?file=Линии уровня плоского скалярного поля на поверхности">Линии уровня плоского скалярного поля на поверхности</a>
+                <br/>
+                <a href="index.html?file=Линии уровня дивергенции плоского векторного поля">Линии уровня дивергенции плоского векторного поля</a>
+                <br/>
+                <a href="index.html?file=Векторные поля">Векторные поля</a>
+                <br/>
+                <a href="index.html?file=Монотонная последовательность">Монотонная последовательность</a>
+                <br/>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
