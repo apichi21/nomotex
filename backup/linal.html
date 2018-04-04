@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <title>Test</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <style>
+    .content {background: #fff; color: #373737; border:1px solid #CCC}
+    .content > div {display: none; padding: 10px 15px 5px}
+
+    .main input {display: none;}
+    label {display: inline-block; padding: 5px 10px; font-weight: 600; text-align: center; background-color: #eee; border:1px solid #CCC;
+      bottom: -1px;
+      position:relative;}
+    label:hover {cursor: pointer}
+    input:checked + label {background: #fff; border-bottom:1px solid #fff}
+
+    #tab1:checked ~ .content #qwantaAG,
+    #tab2:checked ~ .content #techAG,
+    #tab3:checked ~ .content #tasksAG,
+    #tab4:checked ~ .content #qwantaLA,
+    #tab5:checked ~ .content #tasksLA {
+      display: block;
+    }
+    </style>
+</head>
+
+<body>
+        <!-- Reload the current page, without using the cache -->
+    <!-- <input type="button" id="refresh" value="refresh" onclick="location.reload(true);"><br/> -->
+<!--     New: <input type="file" id="infile" accept=".js"/><br/>
+    Old: <input type="file" id="infile1" accept=".js"/><br/><br/>
+    <script type="text/javascript">
+        var infile = document.getElementById('infile');
+        infile.onchange = function() {
+            if (this.files && this.files[0]) {
+                window.location.href='index.html?file=new/'+this.files[0].name.split('.').slice(0,-1).join('.');
+            }
+        }
+        var infile1 = document.getElementById('infile1');
+        infile1.onchange = function() {
+            if (this.files && this.files[0]) {
+                window.location.href='index.html?file='+this.files[0].name.split('.').slice(0,-1).join('.');
+            }
+        }
+    </script> -->
+<div class="main">
+
+  <input id="tab1" type="radio" name="tabs" checked>
+  <label for="tab1">АГ Мат. примеры</label>
+
+  <input id="tab2" type="radio" name="tabs">
+  <label for="tab2">АГ Инж. примеры</label>
+
+  <input id="tab3" type="radio" name="tabs">
+  <label for="tab3">АГ Задачи</label>
+
+  <input id="tab4" type="radio" name="tabs">
+  <label for="tab4">ЛА Примеры</label>
+
+  <input id="tab5" type="radio" name="tabs">
+  <label for="tab5">ЛА Задачи</label>
+
+  <div class="content">
+  <div id="tasksAG">
+    <a href="index.html?file=tasks/Task2&type=1&example_id=1">Задача 2. Семинар</a><br/>
+    <a href="index.html?file=tasks/Task2&type=2&example_id=1">Задача 2. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/Task2&type=3&example_id=1">Задача 2. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/Task2&type=4&example_id=1">Задача 2. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/Task3&type=1&example_id=1">Задача 3. Семинар</a><br/>
+    <a href="index.html?file=tasks/Task3&type=2&example_id=1">Задача 3. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/Task3&type=3&example_id=1">Задача 3. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/Task3&type=4&example_id=1">Задача 3. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/Task4&type=1&example_id=1">Задача 4. Семинар</a><br/>
+    <a href="index.html?file=tasks/Task4&type=2&example_id=1">Задача 4. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/Task4&type=3&example_id=1">Задача 4. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/Task4&type=4&example_id=1">Задача 4. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/Task5&type=1&example_id=1">Задача 5. Семинар</a><br/>
+    <a href="index.html?file=tasks/Task5&type=2&example_id=1">Задача 5. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/Task5&type=3&example_id=1">Задача 5. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/Task5&type=4&example_id=1">Задача 5. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/Task6&type=1&example_id=1">Задача 6. Семинар</a><br/>
+    <a href="index.html?file=tasks/Task6&type=2&example_id=1">Задача 6. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/Task6&type=3&example_id=1">Задача 6. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/Task6&type=4&example_id=1">Задача 6. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/Task7&type=1&example_id=1">Задача 7. Семинар</a><br/>
+    <a href="index.html?file=tasks/Task7&type=2&example_id=1">Задача 7. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/Task7&type=3&example_id=1">Задача 7. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/Task7&type=4&example_id=1">Задача 7. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/Task9&type=1&example_id=1">Задача 9. Семинар</a><br/>
+    <a href="index.html?file=tasks/Task9&type=2&example_id=1">Задача 9. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/Task9&type=3&example_id=1">Задача 9. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/Task9&type=4&example_id=1">Задача 9. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/Task10&type=1&example_id=1">Задача 10. Семинар</a><br/>
+    <a href="index.html?file=tasks/Task10&type=2&example_id=1">Задача 10. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/Task10&type=3&example_id=1">Задача 10. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/Task10&type=4&example_id=1">Задача 10. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/Task11&type=1&example_id=1">Задача 11. Семинар</a><br/>
+    <a href="index.html?file=tasks/Task11&type=2&example_id=1">Задача 11. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/Task11&type=3&example_id=1">Задача 11. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/Task11&type=4&example_id=1">Задача 11. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/Task12&type=1&example_id=1">Задача 12. Семинар</a><br/>
+    <a href="index.html?file=tasks/Task12&type=2&example_id=1">Задача 12. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/Task12&type=3&example_id=1">Задача 12. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/Task12&type=4&example_id=1">Задача 12. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/Task13&type=1&example_id=1">Задача 13. Семинар</a><br/>
+    <a href="index.html?file=tasks/Task13&type=2&example_id=1">Задача 13. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/Task13&type=3&example_id=1">Задача 13. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/Task13&type=4&example_id=1">Задача 13. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/Task14&type=1&example_id=1">Задача 14. Семинар</a><br/>
+    <a href="index.html?file=tasks/Task14&type=2&example_id=1">Задача 14. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/Task14&type=3&example_id=1">Задача 14. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/Task14&type=4&example_id=1">Задача 14. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/Task15&type=1&example_id=1">Задача 15. Семинар</a><br/>
+    <a href="index.html?file=tasks/Task15&type=2&example_id=1">Задача 15. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/Task15&type=3&example_id=1">Задача 15. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/Task15&type=4&example_id=1">Задача 15. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task1&type=1&example_id=1">AG_AT1_Planes_Task1. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task1&type=2&example_id=1">AG_AT1_Planes_Task1. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task1&type=3&example_id=1">AG_AT1_Planes_Task1. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task1&type=4&example_id=1">AG_AT1_Planes_Task1. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task2&type=1&example_id=1">AG_AT1_Planes_Task2. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task2&type=2&example_id=1">AG_AT1_Planes_Task2. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task2&type=3&example_id=1">AG_AT1_Planes_Task2. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task2&type=4&example_id=1">AG_AT1_Planes_Task2. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task3&type=1&example_id=1">AG_AT1_Planes_Task3. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task3&type=2&example_id=1">AG_AT1_Planes_Task3. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task3&type=3&example_id=1">AG_AT1_Planes_Task3. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task3&type=4&example_id=1">AG_AT1_Planes_Task3. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task4&type=1&example_id=1">AG_AT1_Planes_Task4. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task4&type=2&example_id=1">AG_AT1_Planes_Task4. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task4&type=3&example_id=1">AG_AT1_Planes_Task4. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task4&type=4&example_id=1">AG_AT1_Planes_Task4. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task5&type=1&example_id=1">AG_AT1_Planes_Task5. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task5&type=2&example_id=1">AG_AT1_Planes_Task5. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task5&type=3&example_id=1">AG_AT1_Planes_Task5. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task5&type=4&example_id=1">AG_AT1_Planes_Task5. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task6&type=1&example_id=1">AG_AT1_Planes_Task6. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task6&type=2&example_id=1">AG_AT1_Planes_Task6. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task6&type=3&example_id=1">AG_AT1_Planes_Task6. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task6&type=4&example_id=1">AG_AT1_Planes_Task6. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task7&type=1&example_id=1">AG_AT1_Planes_Task7. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task7&type=2&example_id=1">AG_AT1_Planes_Task7. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task7&type=3&example_id=1">AG_AT1_Planes_Task7. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task7&type=4&example_id=1">AG_AT1_Planes_Task7. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task8&type=1&example_id=1">AG_AT1_Planes_Task8. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task8&type=2&example_id=1">AG_AT1_Planes_Task8. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task8&type=3&example_id=1">AG_AT1_Planes_Task8. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task8&type=4&example_id=1">AG_AT1_Planes_Task8. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task9&type=1&example_id=1">AG_AT1_Planes_Task9. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task9&type=2&example_id=1">AG_AT1_Planes_Task9. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task9&type=3&example_id=1">AG_AT1_Planes_Task9. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task9&type=4&example_id=1">AG_AT1_Planes_Task9. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task10&type=1&example_id=1">AG_AT1_Planes_Task10. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task10&type=2&example_id=1">AG_AT1_Planes_Task10. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task10&type=3&example_id=1">AG_AT1_Planes_Task10. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task10&type=4&example_id=1">AG_AT1_Planes_Task10. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task11&type=1&example_id=1">AG_AT1_Planes_Task11. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task11&type=2&example_id=1">AG_AT1_Planes_Task11. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task11&type=3&example_id=1">AG_AT1_Planes_Task11. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task11&type=4&example_id=1">AG_AT1_Planes_Task11. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task12&type=1&example_id=1">AG_AT1_Planes_Task12. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task12&type=2&example_id=1">AG_AT1_Planes_Task12. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task12&type=3&example_id=1">AG_AT1_Planes_Task12. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task12&type=4&example_id=1">AG_AT1_Planes_Task12. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task13&type=1&example_id=1">AG_AT1_Planes_Task13. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task13&type=2&example_id=1">AG_AT1_Planes_Task13. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task13&type=3&example_id=1">AG_AT1_Planes_Task13. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task13&type=4&example_id=1">AG_AT1_Planes_Task13. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task14&type=1&example_id=1">AG_AT1_Planes_Task14. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task14&type=2&example_id=1">AG_AT1_Planes_Task14. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task14&type=3&example_id=1">AG_AT1_Planes_Task14. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task14&type=4&example_id=1">AG_AT1_Planes_Task14. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task15&type=1&example_id=1">AG_AT1_Planes_Task15. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task15&type=2&example_id=1">AG_AT1_Planes_Task15. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task15&type=3&example_id=1">AG_AT1_Planes_Task15. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task15&type=4&example_id=1">AG_AT1_Planes_Task15. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task16&type=1&example_id=1">AG_AT1_Planes_Task16. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task16&type=2&example_id=1">AG_AT1_Planes_Task16. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task16&type=3&example_id=1">AG_AT1_Planes_Task16. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/AG_AT1_Planes_Task16&type=4&example_id=1">AG_AT1_Planes_Task16. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/AG_DZ_curves_Example1&type=1&example_id=1">AG_DZ_curves_Example1. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_DZ_curves_Example2&type=1&example_id=1">AG_DZ_curves_Example2. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_DZ_curves_Example3&type=1&example_id=1">AG_DZ_curves_Example3. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_DZ_curves_Example4&type=1&example_id=1">AG_DZ_curves_Example4. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_DZ_curves_Example5&type=1&example_id=1">AG_DZ_curves_Example5. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_DZ_curves_Example6&type=1&example_id=1">AG_DZ_curves_Example6. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_DZ_curves_Example7&type=1&example_id=1">AG_DZ_curves_Example7. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_DZ_curves_Example8&type=1&example_id=1">AG_DZ_curves_Example8. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_DZ_curves_Example9&type=1&example_id=1">AG_DZ_curves_Example9. Семинар</a><br/><br/>
+    <a href="index.html?file=tasks/AG_DZ_curves_Example10&type=1&example_id=1">AG_DZ_curves_Example10. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_DZ_curves_Example11&type=1&example_id=1">AG_DZ_curves_Example11. Семинар</a><br/><br/>
+
+    <a href="index.html?file=tasks/AG_DZ_curves_Task1&type=1&example_id=1">AG_DZ_curves_Task1. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_DZ_curves_Task1&type=2&example_id=1">AG_DZ_curves_Task1. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/AG_DZ_curves_Task1&type=3&example_id=1">AG_DZ_curves_Task1. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/AG_DZ_curves_Task1&type=4&example_id=1">AG_DZ_curves_Task1. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/AG_DZ_curves_Task2&type=1&example_id=1">AG_DZ_curves_Task2. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_DZ_curves_Task2&type=2&example_id=1">AG_DZ_curves_Task2. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/AG_DZ_curves_Task2&type=3&example_id=1">AG_DZ_curves_Task2. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/AG_DZ_curves_Task2&type=4&example_id=1">AG_DZ_curves_Task2. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/AG_DZ_curves_Task3&type=1&example_id=1">AG_DZ_curves_Task3. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_DZ_curves_Task3&type=2&example_id=1">AG_DZ_curves_Task3. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/AG_DZ_curves_Task3&type=3&example_id=1">AG_DZ_curves_Task3. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/AG_DZ_curves_Task3&type=4&example_id=1">AG_DZ_curves_Task3. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/AG_DZ_curves_Task4&type=1&example_id=1">AG_DZ_curves_Task4. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_DZ_curves_Task4&type=2&example_id=1">AG_DZ_curves_Task4. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/AG_DZ_curves_Task4&type=3&example_id=1">AG_DZ_curves_Task4. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/AG_DZ_curves_Task4&type=4&example_id=1">AG_DZ_curves_Task4. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/AG_DZ_curves_Task5&type=1&example_id=1">AG_DZ_curves_Task5. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_DZ_curves_Task5&type=2&example_id=1">AG_DZ_curves_Task5. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/AG_DZ_curves_Task5&type=3&example_id=1">AG_DZ_curves_Task5. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/AG_DZ_curves_Task5&type=4&example_id=1">AG_DZ_curves_Task5. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/AG_DZ_curves_Task6&type=1&example_id=1">AG_DZ_curves_Task6. Семинар</a><br/>
+    <a href="index.html?file=tasks/AG_DZ_curves_Task6&type=2&example_id=1">AG_DZ_curves_Task6. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/AG_DZ_curves_Task6&type=3&example_id=1">AG_DZ_curves_Task6. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/AG_DZ_curves_Task6&type=4&example_id=1">AG_DZ_curves_Task6. Контрольная</a><br/><br/>
+  </div>
+
+  <div id="tasksLA">
+    <a href="index.html?file=tasks/LA_Task01&type=1&example_id=1">ЛА Задача 1. Семинар</a><br/>
+    <a href="index.html?file=tasks/LA_Task01&type=2&example_id=1">ЛА Задача 1. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/LA_Task01&type=3&example_id=1">ЛА Задача 1. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/LA_Task01&type=4&example_id=1">ЛА Задача 1. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/LA_Task02&type=1&example_id=1">ЛА Задача 2. Семинар</a><br/>
+    <a href="index.html?file=tasks/LA_Task02&type=2&example_id=1">ЛА Задача 2. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/LA_Task02&type=3&example_id=1">ЛА Задача 2. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/LA_Task02&type=4&example_id=1">ЛА Задача 2. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/LA_Task03&type=1&example_id=1">ЛА Задача 3. Семинар</a><br/>
+    <a href="index.html?file=tasks/LA_Task03&type=2&example_id=1">ЛА Задача 3. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/LA_Task03&type=3&example_id=1">ЛА Задача 3. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/LA_Task03&type=4&example_id=1">ЛА Задача 3. Контрольная</a><br/><br/>
+  </div>
+
+  <div id="qwantaAG">
+    <a href="index.html?file=1.1.0-Пространство элементарной геометрии 0">1.1.0-Пространство элементарной геометрии 0</a><br/>
+    <a href="index.html?file=1.1.0-Пространство элементарной геометрии 1">1.1.0-Пространство элементарной геометрии 1</a><br/>
+    <a href="index.html?file=1.1.0-Пространство элементарной геометрии 2">1.1.0-Пространство элементарной геометрии 2</a><br/>
+    <a href="index.html?file=1.1.0-Пространство элементарной геометрии 3">1.1.0-Пространство элементарной геометрии 3</a><br/>
+    <a href="index.html?file=1.1.3-Длина вектора">1.1.3-Длина вектора</a><br/>
+    <a href="index.html?file=1.1.4-Коллинеарные векторы">1.1.4-Коллинеарные векторы</a><br/>
+    <a href="index.html?file=1.1.5-Компланарные векторы">1.1.5-Компланарные векторы</a><br/>
+    <a href="index.html?file=1.1.6-Равные векторы">1.1.6-Равные векторы</a><br/>
+    <a href="index.html?file=1.1.7-Единичный вектор">1.1.7-Единичный вектор</a><br/>
+    <a href="index.html?file=1.1.8-Орт вектора">1.1.8-Орт вектора</a><br/>
+    <a href="index.html?file=1.1.9-Угол между векторами">1.1.9-Угол между векторами</a><br/>
+    <a href="index.html?file=1.1.10-Ортогональные векторы">1.1.10-Ортогональные векторы</a><br/>
+    <a href="index.html?file=1.1.11-Противоположные векторы">1.1.11-Противоположные векторы</a><br/>
+    <br/>
+    <a href="index.html?file=1.2.3-Сложение векторов">1.2.3-Сложение векторов</a><br/>
+    <a href="index.html?file=1.2.6-Раздность векторов">1.2.6-Раздность векторов</a><br/>
+    <a href="index.html?file=1.2.7-Произведение вектора на действительное число">1.2.7-Произведение вектора на действительное число</a><br/>
+    <a href="index.html?file=1.2.8-Критерий коллинеарности векторов">1.2.8-Критерий коллинеарности векторов</a><br/>
+    <a href="index.html?file=1.2.10-Деление вектора на действительное число">1.2.10-Деление вектора на действительное число</a><br/>
+    <br/>
+    <a href="index.html?file=1.3.2-Ортогональная проекция">1.3.2-Ортогональная проекция</a><br/>
+    <a href="index.html?file=1.3.3-Вычислениие ортогональной проекции">1.3.3-Вычислениие ортогональной проекции</a><br/>
+    <a href="index.html?file=1.3.4-Ортогональная проекция суммы">1.3.4-Ортогональная проекция суммы</a><br/>
+    <a href="index.html?file=1.3.5-Ортогональная проекция произведения на число">1.3.5-Ортогональная проекция произведения на число</a><br/>
+    <br/>
+    <a href="index.html?file=1.4.1-Линейная комбинация векторов">1.4.1-Линейная комбинация векторов</a><br/>
+    <br/>
+    <a href="index.html?file=1.5.4-Базис векторного пространства V3">1.5.4-Базис векторного пространства V3</a><br/>
+    <a href="index.html?file=1.5.6-Критерий коллинеарности векторов">1.5.6-Критерий коллинеарности векторов</a><br/>
+    <a href="index.html?file=1.5.6-Произведение вектора на действительное число">1.5.6-Произведение вектора на действительное число</a><br/>
+    <a href="index.html?file=1.5.6-Сложение векторов">1.5.6-Сложение векторов</a><br/>
+    <a href="index.html?file=1.5.7-Ортонормированный базис векторного пространства V3">1.5.7-Ортонормированный базис векторного пространства V3</a><br/>
+    <br/>
+    <a href="index.html?file=1.6.1-Скалярное произведение векторов">1.6.1-Скалярное произведение векторов</a><br/>
+    <a href="index.html?file=1.6.3-Скалярное произведение в координатной форме">1.6.3-Скалярное произведение в координатной форме</a><br/>
+    <a href="index.html?file=1.6.4-Вычисление ортогональной проекции">1.6.4-Вычисление ортогональной проекции</a><br/>
+    <a href="index.html?file=1.6.5-Вычисление угла между векторами">1.6.5-Вычисление угла между векторами</a><br/>
+    <a href="index.html?file=1.6.6-Направляющие косинусы">1.6.6-Направляющие косинусы</a><br/>
+    <br/>
+    <a href="index.html?file=1.7.1-Тройки веторов">1.7.1-Тройки веторов</a><br/>
+    <a href="index.html?file=1.7.2-Векторное произведение векторов">1.7.2-Векторное произведение векторов</a><br/>
+    <a href="index.html?file=1.7.3-Геометрический смысл векторного произведения">1.7.3-Геометрический смысл векторного произведения</a><br/>
+    <a href="index.html?file=1.7.4-Механический смысл векторного произведения">1.7.4-Механический смысл векторного произведения</a><br/>
+    <a href="index.html?file=1.7.7-Векторное произведение в координатной форме">1.7.7-Векторное произведение в координатной форме</a><br/>
+    <a href="index.html?file=1.7.8-Двойное векторное произведение">1.7.8-Двойное векторное произведение</a><br/>
+    <br/>
+    <a href="index.html?file=1.8.1-Смешанное произведение">1.8.1-Смешанное произведение</a><br/>
+    <a href="index.html?file=1.8.2-Геометрический смысл смешанного произведения">1.8.2-Геометрический смысл смешанного произведения</a><br/>
+    <br/>
+    <a href="index.html?file=2.1.1-Аффинная система координат">2.1.1-Аффинная система координат</a><br/>
+    <a href="index.html?file=2.1.2-Радиус-вектор">2.1.2-Радиус-вектор</a><br/>
+    <a href="index.html?file=2.1.3-Координаты радиус-вектора">2.1.3-Координаты радиус-вектора</a><br/>
+    <a href="index.html?file=2.1.5-Параллельный перенос осей">2.1.5-Параллельный перенос осей</a><br/>
+    <br/>
+    <a href="index.html?file=2.2.1-Уравнение линии">2.2.1-Уравнение линии</a><br/>
+    <a href="index.html?file=2.2.2-Уравнение поверхности">2.2.2-Уравнение поверхности</a><br/>
+    <br/>
+    <a href="index.html?file=2.3.1-Длина отрезка">2.3.1-Длина отрезка</a><br/>
+    <a href="index.html?file=2.3.2-Деление отрезка в заданном соотношении">2.3.2-Деление отрезка в заданном соотношении</a><br/>
+    <br/>
+    <a href="index.html?file=2.4.1-Нормальный вектор прямой">2.4.1-Нормальный вектор прямой</a><br/>
+    <a href="index.html?file=2.4.2-Общее уравнение прямой">2.4.2-Общее уравнение прямой</a><br/>
+    <a href="index.html?file=2.4.4-Уравнение прямой, проходящей через точку">2.4.4-Уравнение прямой, проходящей через точку</a><br/>
+    <a href="index.html?file=2.4.7-Перпендикулярность прямой и вектора">2.4.7-Перпендикулярность прямой и вектора</a><br/>
+    <a href="index.html?file=2.4.9-Угол наклона прямой">2.4.9-Угол наклона прямой</a><br/>
+    <a href="index.html?file=2.4.10-Уравнение прямой с угловым коэффициентом">2.4.10-Уравнение прямой с угловым коэффициентом</a><br/>
+    <a href="index.html?file=2.4.12-Уравнение прямой в отрезках">2.4.12-Уравнение прямой в отрезках</a><br/>
+    <a href="index.html?file=2.4.13-Угол между прямыми">2.4.13-Угол между прямыми</a><br/>
+    <a href="index.html?file=2.4.14-Параллельность и перпендикулярность прямых">2.4.14-Параллельность и перпендикулярность прямых</a><br/>
+    <a href="index.html?file=2.4.15-Расстояние от точки до прямой на плоскости">2.4.15-Расстояние от точки до прямой на плоскости</a><br/>
+    <br/>
+    <a href="index.html?file=2.5.1-Нормальный вектор плоскости">2.5.1-Нормальный вектор плоскости</a><br/>
+    <a href="index.html?file=2.5.3-Уравнение плоскости, проходящей через точку">2.5.3-Уравнение плоскости, проходящей через точку</a><br/>
+    <a href="index.html?file=2.5.4-Общее уравнение плоскости">2.5.4-Общее уравнение плоскости</a><br/>
+    <a href="index.html?file=2.5.5-Связка плоскостей">2.5.5-Связка плоскостей</a><br/>
+    <a href="index.html?file=2.5.9-Угол между плоскостями">2.5.9-Угол между плоскостями</a><br/>
+    <a href="index.html?file=2.5.10-Расстояние от точки до плоскости">2.5.10-Расстояние от точки до плоскости</a><br/>
+    <a href="index.html?file=2.5.11-Уравнение плоскости, проходящей через три заданные точки">2.5.11-Уравнение плоскости, проходящей через три заданные точки</a><br/>
+    <a href="index.html?file=2.5.12-Уравнение плоскости в отрезках">2.5.12-Уравнение плоскости в отрезках</a><br/>
+    <br/>
+    <a href="index.html?file=2.6.1-Общие уравнения прямой в пространстве">2.6.1-Общие уравнения прямой в пространстве</a><br/>
+    <a href="index.html?file=2.6.3-Пучок плоскостей">2.6.3-Пучок плоскостей</a><br/>
+    <a href="index.html?file=2.6.4-Направляющий вектор прямой">2.6.4-Направляющий вектор прямой</a><br/>
+    <a href="index.html?file=2.6.5-Векторное, параметрическое и каноническое уравнения прямой">2.6.5-Векторное, параметрическое и каноническое уравнения прямой</a><br/>
+    <a href="index.html?file=2.6.7-Уравнение прямой, проходящей через две заданные точки">2.6.7-Уравнение прямой, проходящей через две заданные точки</a><br/>
+    <a href="index.html?file=2.6.8-Угол между прямыми в пространстве">2.6.8-Угол между прямыми в пространстве</a><br/>
+    <br/>
+    <a href="index.html?file=2.7.3-Угол между прямой и плоскостью">2.7.3-Угол между прямой и плоскостью</a><br/>
+    <a href="index.html?file=2.7.5-Расстояние от точки до прямой в пространстве">2.7.5-Расстояние от точки до прямой в пространстве</a><br/>
+    <a href="index.html?file=2.7.6-Расстояние между скрещивающимися прямыми">2.7.6-Расстояние между скрещивающимися прямыми</a><br/>
+    <br/>
+    <a href="index.html?file=3.1.4-Эллипс">3.1.4-Эллипс</a><br/>
+    <a href="index.html?file=3.1.5-Каноническое уравнение эллипса">3.1.5-Каноническое уравнение эллипса</a><br/>
+    <a href="index.html?file=3.1.6-Свойства эллипса">3.1.6-Свойства эллипса</a><br/>
+    <a href="index.html?file=3.1.7-Гипербола">3.1.7-Гипербола</a><br/>
+    <a href="index.html?file=3.1.8-Каноническое уравнение гиперболы">3.1.8-Каноническое уравнение гиперболы</a><br/>
+    <a href="index.html?file=3.1.9-Свойства гиперболы">3.1.9-Свойства гиперболы</a><br/>
+    <a href="index.html?file=3.1.10-Парабола">3.1.10-Парабола</a><br/>
+    <a href="index.html?file=3.1.11-Каноническое уравнение параболы">3.1.11-Каноническое уравнение параболы</a><br/>
+    <a href="index.html?file=3.1.12-Свойства параболы">3.1.12-Свойства параболы</a><br/>
+    <br/>
+    <a href="index.html?file=3.3.4-Цилиндрические поверхности">3.3.4-Цилиндрические поверхности</a><br/>
+    <a href="index.html?file=3.3.7-Поверхность вращения">3.3.7-Поверхность вращения</a><br/>
+    <a href="index.html?file=3.3.9-Эллипсоид">3.3.9-Эллипсоид</a><br/>
+    <a href="index.html?file=3.3.10-Конус второго порядка">3.3.10-Конус второго порядка</a><br/>
+    <a href="index.html?file=3.3.11-Однополостный гиперболоид">3.3.11-Однополостный гиперболоид</a><br/>
+    <a href="index.html?file=3.3.12-Двуполостный гиперболоид">3.3.12-Двуполостный гиперболоид</a><br/>
+    <a href="index.html?file=3.3.13-Эллиптический параболоид">3.3.13-Эллиптический параболоид</a><br/>
+    <a href="index.html?file=3.3.14-Гиперболический параболоид">3.3.14-Гиперболический параболоид</a><br/>
+    <br/>
+  </div>
+  <div id="techAG">
+    <a href="index.html?file=ag.tech.2.1.2">ag.tech.2.1.2-Радиус-вектор</a><br/>
+    <a href="index.html?file=ag.tech.2.1.5">ag.tech.2.1.5-Параллельный перенос осей</a><br/>
+    <a href="index.html?file=ag.tech.2.3.1">ag.tech.2.3.1-Длина отрезка</a><br/>
+    <a href="index.html?file=ag.tech.2.3.2">ag.tech.2.3.2-Деление отрезка в заданном соотношении</a><br/>
+    <a href="index.html?file=ag.tech.2.4.1">ag.tech.2.4.1-Нормальный вектор прямой</a><br/>
+    <a href="index.html?file=ag.tech.2.4.2">ag.tech.2.4.2-Общее уравнение прямой</a><br/>
+    <a href="index.html?file=ag.tech.2.4.9">ag.tech.2.4.9-Угол наклона прямой</a><br/>
+    <a href="index.html?file=ag.tech.3.1.4">ag.tech.3.1.4-Эллипс</a><br/>
+  </div>
+  <div id="qwantaLA">
+    <b>Полноценные примеры:</b><br/>
+    <a href="index.html?file=03.01.02.03 1">03.01.02.03 1</a><br/>
+    <a href="index.html?file=03.01.02.03 2">03.01.02.03 2</a><br/>
+    <a href="index.html?file=03.01.02.03 3">03.01.02.03 3</a><br/>
+    <a href="index.html?file=03.01.02.05 engineering">03.01.02.05 инженерный</a><br/>
+    <a href="index.html?file=03.01.02.05">03.01.02.05</a><br/><br/>
+
+    <a href="index.html?file=03.01.04.01">03.01.04.01</a><br/>
+    <a href="index.html?file=03.01.04.04 1">03.01.04.04 1</a><br/>
+    <a href="index.html?file=03.01.04.04 4">03.01.04.04 4</a><br/><br/>
+
+    <b>Текстовые примеры:</b><br/>
+    <a href="index.html?file=03.01.01.01 1">03.01.01.01 1</a><br/>
+    <a href="index.html?file=03.01.01.01 2">03.01.01.01 2</a><br/>
+    <a href="index.html?file=03.01.01.01 3">03.01.01.01 3</a><br/>
+    <a href="index.html?file=03.01.01.01 4">03.01.01.01 4</a><br/><br/>
+
+    <a href="index.html?file=03.01.04.04 2">03.01.04.04 2</a><br/>
+    <a href="index.html?file=03.01.04.04 3">03.01.04.04 3</a><br/><br/>
+
+    <a href="index.html?file=03.01.08.01 1">03.01.08.01 1</a><br/>
+    <a href="index.html?file=03.01.08.01 2">03.01.08.01 2</a><br/>
+    <a href="index.html?file=03.01.08.01 3">03.01.08.01 3</a><br/>
+    <a href="index.html?file=03.01.08.01 4">03.01.08.01 4</a><br/>
+    <a href="index.html?file=03.01.08.02 1">03.01.08.02 1</a><br/>
+    <a href="index.html?file=03.01.08.02 2">03.01.08.02 2</a><br/>
+    <a href="index.html?file=03.01.08.02 3">03.01.08.02 3</a><br/><br/>
+
+    <a href="index.html?file=03.01.09.08">03.01.09.08</a><br/><br/>
+    <a href="index.html?file=03.01.10.02 1">03.01.10.02 1</a><br/>
+    <a href="index.html?file=03.01.10.02 2">03.01.10.02 2</a><br/>
+    <a href="index.html?file=03.01.10.02 3">03.01.10.02 3</a><br/>
+    <a href="index.html?file=03.01.10.03 1">03.01.10.03 1</a><br/>
+    <a href="index.html?file=03.01.10.03 2">03.01.10.03 2</a><br/>
+    <a href="index.html?file=03.01.10.03 3">03.01.10.03 3</a><br/><br/>
+
+    <a href="index.html?file=03.01.12.04">03.01.12.04</a><br/>
+    <a href="index.html?file=03.01.12.05">03.01.12.05</a><br/><br/>
+
+    <a href="index.html?file=03.01.13.09">03.01.13.09</a><br/><br/>
+
+    <a href="index.html?file=03.01.14.04">03.01.14.04</a><br/><br/>
+
+    <a href="index.html?file=03.01.15.06">03.01.15.06</a><br/><br/>
+
+    <a href="index.html?file=03.01.16.08">03.01.16.08</a><br/><br/>
+
+    <a href="index.html?file=03.01.17.04">03.01.17.04</a><br/>
+    <a href="index.html?file=03.01.17.05">03.01.17.05</a><br/><br/>
+
+    <a href="index.html?file=03.01.18.02 1">03.01.18.02 1</a><br/>
+    <a href="index.html?file=03.01.18.02 2">03.01.18.02 2</a><br/>
+    <a href="index.html?file=03.01.18.03">03.01.18.03</a><br/><br/>
+  </div>
+          </div>
+
+        </div>
+    </body>
+</html>

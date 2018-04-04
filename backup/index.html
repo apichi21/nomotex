@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+<title>Примеры для квантов</title>
+<meta charset="utf-8">
+
+<script type="text/javascript" src="js/glMatrix-0.9.5.min.js"></script>
+<script type="text/javascript" src="js/webgl-utils.js"></script>
+
+<!-- <script type="text/javascript" src="static/js/jquery-2.2.3.min.js"></script>
+<link rel="stylesheet" href="static/js/katex/katex.min.css">
+<script src="static/js/katex/katex.min.js"></script>
+<script type="text/javascript" async src="static/js/MathJax.js?config=TeX-AMS_CHTML"></script> -->
+
+<script type="text/javascript" src="/static/js/jquery-2.2.3.min.js"></script>
+<link rel="stylesheet" href="/static/js/katex/katex.min.css">
+<script src="/static/js/katex/katex.min.js"></script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+
+<script type="text/javascript" src="primitives.js"></script>
+<script id="vectorsScript" type="text/javascript"></script>
+<script id="loadarea" type="text/javascript"></script>
+
+<script id="shader-vs" type="x-shader/x-vertex">
+    #ifdef GL_ES
+    #  ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #  else
+    precision mediump float;
+    #  endif
+    #endif
+
+    attribute vec3 aVertexPosition;
+    attribute vec4 aVertexColor;
+    attribute vec3 aZoomVector;
+
+    uniform mat4 uMVMatrix;
+    uniform mat4 uPMatrix;
+    uniform float uZoomFactor;
+
+    varying vec4 vColor;
+
+    void main(void) {
+        vec3 zoomedVertexPosition = aVertexPosition+aZoomVector*(uZoomFactor-1.0);
+        gl_Position = uPMatrix * (uMVMatrix * vec4(zoomedVertexPosition,1.0));
+        vColor = aVertexColor;
+    }
+</script>
+<script id="shader-fs" type="x-shader/x-fragment">
+    #ifdef GL_ES
+    #  ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #  else
+    precision mediump float;
+    #  endif
+    #endif
+
+    varying vec4 vColor;
+
+    void main(void) {
+        gl_FragColor = vColor;
+    }
+</script>
+
+<script id="shader-stripe-vs" type="x-shader/x-vertex">
+    #ifdef GL_ES
+    #  ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #  else
+    precision mediump float;
+    #  endif
+    #endif
+
+    attribute vec3 aVertexPosition;
+    attribute vec4 aVertexColor;
+    attribute vec3 aZoomVector;
+    attribute float aLCoord;
+
+    uniform mat4 uMVMatrix;
+    uniform mat4 uPMatrix;
+    uniform float uZoomFactor;
+    uniform bool uOffset;
+
+    varying vec4 vColor;
+    varying float vLCoord;
+
+    void main(void) {
+        vec3 zoomedVertexPosition = aVertexPosition+aZoomVector*(uZoomFactor-1.0);
+        gl_Position = uPMatrix * (uMVMatrix * vec4(zoomedVertexPosition,1.0));
+
+        if (uOffset) {
+          gl_Position.z-= 1.0; // Offset
+        }
+        vColor = aVertexColor;
+        vLCoord = aLCoord/uZoomFactor;
+    }
+</script>
+<script id="shader-stripe-fs" type="x-shader/x-fragment">
+    #ifdef GL_ES
+    #  ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #  else
+    precision mediump float;
+    #  endif
+    #endif
+
+    varying vec4 vColor;
+    varying float vLCoord;
+
+    void main(void) {
+        // if (mod(vLCoord,34.0)>20.0) {
+        if (mod(vLCoord+5.0,17.0)>10.0) {
+            discard;
+        }
+        else {
+            gl_FragColor = vColor;
+        }
+    }
+</script>
+
+<script id="shader-texture-vs" type="x-shader/x-vertex">
+    #ifdef GL_ES
+    #  ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #  else
+    precision mediump float;
+    #  endif
+    #endif
+
+    attribute vec3 aVertexPosition;
+    attribute vec2 aTextureCoord;
+
+    uniform mat4 uMVMatrix;
+    uniform mat4 uPMatrix;
+
+    varying vec2 vTextureCoord;
+
+    void main(void) {
+        gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+        vTextureCoord = aTextureCoord;
+    }
+</script>
+<script id="shader-texture-fs" type="x-shader/x-fragment">
+    #ifdef GL_ES
+    #  ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #  else
+    precision mediump float;
+    #  endif
+    #endif
+
+    varying vec2 vTextureCoord;
+
+    uniform sampler2D uSampler;
+
+    void main(void) {
+        gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+    }
+</script>
+
+<script id="shader-light-vs" type="x-shader/x-vertex">
+    #ifdef GL_ES
+    #  ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #  else
+    precision mediump float;
+    #  endif
+    #endif
+
+    attribute vec3 aVertexPosition;
+    attribute vec3 aNormal;
+
+    uniform mat4 uMVMatrix;
+    uniform mat4 uPMatrix;
+    uniform mat4 uWorldInverseTranspose;
+
+    varying vec3 vNormal;
+
+    void main(void) {
+        vec4 modelViewSpacePos = uMVMatrix * vec4(aVertexPosition, 1.0);
+        gl_Position = uPMatrix * modelViewSpacePos;
+        vNormal = mat3(uWorldInverseTranspose) * aNormal;
+    }
+</script>
+<script id="shader-light-fs" type="x-shader/x-fragment">
+    #ifdef GL_ES
+    #  ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #  else
+    precision mediump float;
+    #  endif
+    #endif
+
+    varying vec3 vNormal;
+    uniform vec4 uColor;
+    uniform vec3 uReverseLightDirection;
+
+    void main(void) {
+        gl_FragColor = uColor;
+        vec3 normal = normalize(vNormal);
+        float light = abs(dot(normal, uReverseLightDirection));
+        gl_FragColor.rgb *= light*(1.0-0.5)+0.5;
+    }
+</script>
+<script id="shader-light-peelcolor1-fs" type="x-shader/x-fragment">
+    #ifdef GL_ES
+    #  ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #  else
+    precision mediump float;
+    #  endif
+    #endif
+
+    uniform vec2 canvas_size;
+
+    uniform sampler2D D0;
+
+    varying vec3 vNormal;
+    uniform vec4 uColor;
+    uniform vec3 uReverseLightDirection;
+
+    void main(void) {
+        float mask = 256.0;
+        float di = (1.0-gl_FragCoord.z)*16777215.0;
+        float r = mod(floor(di), mask)/255.0;
+        float g = mod(floor(di / 256.0), mask)/255.0;
+        float b = mod(floor(di / 65536.0), mask)/255.0;
+
+        vec2 loc = vec2(gl_FragCoord.x/canvas_size.x, gl_FragCoord.y/canvas_size.y);
+        vec3 zminTex = texture2D(D0, loc).rgb;
+
+        bool ismin = zminTex.r+zminTex.g*256.0+zminTex.b*65536.0 < r+g*256.0+b*65536.0;
+        if (ismin) {
+            gl_FragColor = uColor;
+            vec3 normal = normalize(vNormal);
+            float light = abs(dot(normal, uReverseLightDirection));
+            gl_FragColor.rgb *= light*(1.0-0.5)+0.5;
+        } else {
+            discard;
+        }
+    }
+</script>
+<script id="shader-light-peelcolor2-fs" type="x-shader/x-fragment">
+    #ifdef GL_ES
+    #  ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #  else
+    precision mediump float;
+    #  endif
+    #endif
+
+    uniform vec2 canvas_size;
+
+    uniform sampler2D D0;
+    uniform sampler2D D1;
+
+    varying vec3 vNormal;
+    uniform vec4 uColor;
+    uniform vec3 uReverseLightDirection;
+
+    void main(void) {
+        float mask = 256.0;
+        float di = (1.0-gl_FragCoord.z)*16777215.0;
+        float r = mod(floor(di), mask)/255.0;
+        float g = mod(floor(di / 256.0), mask)/255.0;
+        float b = mod(floor(di / 65536.0), mask)/255.0;
+
+        vec2 loc = vec2(gl_FragCoord.x/canvas_size.x, gl_FragCoord.y/canvas_size.y);
+        vec3 zminTex = texture2D(D0, loc).rgb;
+        vec3 zmaxTex = texture2D(D1, loc).rgb;
+
+        bool ismin = zminTex.r+zminTex.g*256.0+zminTex.b*65536.0 < r+g*256.0+b*65536.0;
+        bool ismax = zmaxTex.r+zmaxTex.g*256.0+zmaxTex.b*65536.0 > r+g*256.0+b*65536.0;
+
+        if (ismin && ismax) {
+            gl_FragColor = uColor;
+            vec3 normal = normalize(vNormal);
+            float light = abs(dot(normal, uReverseLightDirection));
+            gl_FragColor.rgb *= light*(1.0-0.5)+0.5;
+        } else {
+            discard;
+        }
+    }
+</script>
+
+<script id="shader-light-peeldepth-vs" type="x-shader/x-vertex">
+    #ifdef GL_ES
+    #  ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #  else
+    precision mediump float;
+    #  endif
+    #endif
+
+    attribute vec3 aVertexPosition;
+
+    uniform mat4 uMVMatrix;
+    uniform mat4 uPMatrix;
+
+    void main(void) {
+        vec4 modelViewSpacePos = uMVMatrix * vec4(aVertexPosition, 1.0);
+        gl_Position = uPMatrix * modelViewSpacePos;
+    }
+</script>
+<script id="shader-light-peeldepth0-fs" type="x-shader/x-fragment">
+    #ifdef GL_ES
+    #  ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #  else
+    precision mediump float;
+    #  endif
+    #endif
+
+    void main(void) {
+        float mask = 256.0;
+        float di = (1.0-gl_FragCoord.z)*16777215.0;
+        float r = mod(floor(di), mask)/255.0;
+        float g = mod(floor(di / 256.0), mask)/255.0;
+        float b = mod(floor(di / 65536.0), mask)/255.0;
+
+        gl_FragColor = vec4(r, g, b, 1.0);
+    }
+</script>
+
+<script id="shader-light-peeldepth1-fs" type="x-shader/x-fragment">
+    #ifdef GL_ES
+    #  ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #  else
+    precision mediump float;
+    #  endif
+    #endif
+
+    uniform vec2 canvas_size;
+    uniform sampler2D D0;
+
+    void main(void) {
+        float mask = 256.0;
+        float di = (1.0-gl_FragCoord.z)*16777215.0;
+        float r = mod(floor(di), mask)/255.0;
+        float g = mod(floor(di / 256.0), mask)/255.0;
+        float b = mod(floor(di / 65536.0), mask)/255.0;
+
+        vec2 loc = vec2(gl_FragCoord.x/canvas_size.x, gl_FragCoord.y/canvas_size.y);
+        vec3 zminTex = texture2D(D0, loc).rgb;
+
+        bool ismin = zminTex.r+zminTex.g*256.0+zminTex.b*65536.0 < r+g*256.0+b*65536.0;
+
+        if (ismin) {
+            gl_FragColor = vec4(r, g, b, 1);
+        } else {
+            discard;
+        }
+    }
+</script>
+
+<script id="shader-light-peeldepth2-fs" type="x-shader/x-fragment">
+    #ifdef GL_ES
+    #  ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #  else
+    precision mediump float;
+    #  endif
+    #endif
+
+    uniform vec2 canvas_size;
+    uniform sampler2D D0;
+    uniform sampler2D D1;
+
+    void main(void) {
+        float mask = 256.0;
+        float di = (1.0-gl_FragCoord.z)*16777215.0;
+        float r = mod(floor(di), mask)/255.0;
+        float g = mod(floor(di / 256.0), mask)/255.0;
+        float b = mod(floor(di / 65536.0), mask)/255.0;
+
+        vec2 loc = vec2(gl_FragCoord.x/canvas_size.x, gl_FragCoord.y/canvas_size.y);
+        vec3 zminTex = texture2D(D0, loc).rgb;
+        vec3 zmaxTex = texture2D(D1, loc).rgb;
+
+        bool ismin = zminTex.r+zminTex.g*256.0+zminTex.b*65536.0 < r+g*256.0+b*65536.0;
+        bool ismax = zmaxTex.r+zmaxTex.g*256.0+zmaxTex.b*65536.0 > r+g*256.0+b*65536.0;
+
+        if (ismin && ismax) {
+          gl_FragColor = vec4(r, g, b, 1);
+        } else {
+            discard;
+        }
+    }
+</script>
+
+<script id="shader-light-merge-vs" type="x-shader/x-vertex">
+    #ifdef GL_ES
+    #  ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #  else
+    precision mediump float;
+    #  endif
+    #endif
+
+    attribute vec3 aVertexPosition;
+
+    void main(void) {
+        gl_Position = vec4(aVertexPosition, 1.0);
+    }
+</script>
+
+<script id="shader-light-mergeN-vs" type="x-shader/x-vertex">
+    #ifdef GL_ES
+    #  ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #  else
+    precision mediump float;
+    #  endif
+    #endif
+
+    attribute vec3 aVertexPosition;
+    varying vec2 vTextureCoord;
+
+    void main(void) {
+        gl_Position = vec4(aVertexPosition, 1.0);
+        vTextureCoord = vec2( (aVertexPosition.x+1.0)/2.0, (aVertexPosition.y+1.0)/2.0 );
+    }
+</script>
+<script id="shader-light-mergeN-fs" type="x-shader/x-fragment">
+    #ifdef GL_ES
+    #  ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #  else
+    precision mediump float;
+    #  endif
+    #endif
+
+    uniform sampler2D C0;
+    uniform vec2 canvas_size;
+    varying vec2 vTextureCoord;
+
+    void main(void) {
+        vec2 loc = vec2( gl_FragCoord.x/canvas_size.x, gl_FragCoord.y/canvas_size.y);
+        gl_FragColor = texture2D(C0, vTextureCoord);
+    }
+</script>
+<script id="shader-light-merge-fs" type="x-shader/x-fragment">
+    #ifdef GL_ES
+    #  ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #  else
+    precision mediump float;
+    #  endif
+    #endif
+
+    uniform sampler2D C0;
+    uniform sampler2D C1;
+    uniform sampler2D C2;
+    uniform sampler2D C3;
+    uniform sampler2D C4;
+    uniform sampler2D C5;
+    uniform sampler2D C6;
+    uniform sampler2D C7;
+    uniform sampler2D C8;
+    uniform sampler2D C9;
+    uniform sampler2D C10;
+    uniform sampler2D C11;
+    uniform sampler2D C12;
+    uniform sampler2D C13;
+    uniform sampler2D C14;
+    uniform sampler2D C15;
+    uniform vec2 canvas_size;
+
+    void main(void) {
+        vec2 loc = vec2( gl_FragCoord.x/canvas_size.x, gl_FragCoord.y/canvas_size.y);
+        vec4 c0 = texture2D(C0, loc);
+        vec4 c1 = texture2D(C1, loc);
+        vec4 c2 = texture2D(C2, loc);
+        vec4 c3 = texture2D(C3, loc);
+        vec4 c4 = texture2D(C4, loc);
+        vec4 c5 = texture2D(C5, loc);
+        vec4 c6 = texture2D(C6, loc);
+        vec4 c7 = texture2D(C7, loc);
+        vec4 c8 = texture2D(C8, loc);
+        vec4 c9 = texture2D(C9, loc);
+        vec4 c10 = texture2D(C10, loc);
+        vec4 c11 = texture2D(C11, loc);
+        vec4 c12 = texture2D(C12, loc);
+        vec4 c13 = texture2D(C13, loc);
+        vec4 c14 = texture2D(C14, loc);
+        vec4 c15 = texture2D(C15, loc);
+
+        vec3 mcolor = c1.rgb*c1.a +
+                     (1.0-c1.a)*(c2.rgb*c2.a +
+                     (1.0-c2.a)*(c3.rgb*c3.a +
+                     (1.0-c3.a)*(c4.rgb*c4.a +
+                     (1.0-c4.a)*(c5.rgb*c5.a +
+                     (1.0-c5.a)*(c6.rgb*c6.a +
+                     (1.0-c6.a)*(c7.rgb*c7.a +
+                     (1.0-c7.a)*(c8.rgb*c8.a +
+                     (1.0-c8.a)*(c9.rgb*c9.a +
+                     (1.0-c9.a)*(c10.rgb*c10.a +
+                     (1.0-c10.a)*(c11.rgb*c11.a +
+                     (1.0-c11.a)*(c12.rgb*c12.a +
+                     (1.0-c12.a)*(c13.rgb*c13.a +
+                     (1.0-c13.a)*(c14.rgb*c14.a +
+                     (1.0-c14.a)*(c15.rgb*c15.a +
+                     (1.0-c15.a)*c0.rgb))))))))))))));
+
+        gl_FragColor = vec4 (mcolor, 1.0);
+    }
+</script>
+
+<script type="text/javascript">
+    Math.cosh = Math.cosh || function(x) {
+      var y = Math.exp(x);
+      return (y + 1 / y) / 2;
+    };
+    Math.sinh = Math.sinh || function(x) {
+      var y = Math.exp(x);
+      return (y - 1 / y) / 2;
+    }
+    var searchParam = decodeURI(window.location.search.substring(1));
+    // var hashParam = decodeURI(window.location.hash.substring(1));
+  // if (hashParam!="") {
+  //   document.getElementById('loadarea').src= hashParam+'.js';
+
+  //   if (hashParam=="1.7.2" || hashParam=="Смешаное") {
+  //     document.getElementById('vectorsScript').src= 'vectors3d.js';
+  //   }
+  //   else {
+  //     document.getElementById('vectorsScript').src= 'vectors2d.js';
+  //   }
+  //   console.log("C = ",C);
+  // } else {
+  //   document.getElementById('vectorsScript').src= 'vectors2d.js';
+  // }
+
+  var filename = "";
+  var testType = "";
+  var example_id = "";
+
+  if (searchParam!="") {
+    var parameters = searchParam.split('&');
+    for (var i = 0; i < parameters.length; i++) {
+      var param1 = parameters[i].split('=');
+      if (param1[0] === "file") filename = param1[1];
+      if (param1[0] === "type") testType = param1[1];
+      if (param1[0] === "example_id") example_id = param1[1];
+    }
+    if (filename!="") {
+      var scriptQuantum = document.createElement('script');
+      scriptQuantum.src = 'files/'+filename+'.js';
+      document.head.appendChild(scriptQuantum);
+
+      scriptQuantum.onload = function() {
+        var scriptEngine = document.createElement('script');
+        // if (dimention=="3d") {
+        //   scriptEngine.src = "vectors3d.js";
+        // }
+        // else {
+        //   scriptEngine.src = "vectors2d.js";
+        // }
+        scriptEngine.src = "vectors.js";
+        document.head.appendChild(scriptEngine);
+        scriptEngine.onload = function() {
+          webGLStart();
+        }
+      }
+    }
+  }
+</script>
+</head>
+
+
+<body >
+  <style>
+    body {
+      margin: 0px;
+      font-family: "Trebuchet MS",Tahoma,Arial,Helvetica,sans-serif;
+    }
+    label {
+      font-weight: normal !important;
+      display: block;
+      padding-top: 5px;
+    }
+    label:hover {
+      background: #f3fdff;
+    }
+    .whitelabel {
+      background: #ffffff;
+      padding-left: 5px;
+    }
+    .whitelabel:hover {
+      background: #DDE7E9;
+    }
+    .canvasContainer {
+      width: 100vw;
+      border-spacing: 0px;
+    }
+    .canvasContainer td {
+      padding: 0px;
+      vertical-align: top
+    }
+    #containerGreen {
+      position: relative;
+      overflow: hidden;
+      white-space: nowrap;
+      border-right:1px solid #bbb;
+    }
+    #containerYellow {
+      /*width: 300px;*/
+      min-width: 300px;
+      height:100vh;
+      background-color: #e7f1f3;
+      padding-left: 5px;
+      padding-right: 20px;
+      /*font-size: 20px; */
+      /*color: #555; */
+      font-size: 16px;
+      color: #272727;
+      overflow:auto;
+      overflow-y: overlay;
+      line-height: 1.5;
+    }
+    #Vectors3D-canvas {
+      width: 100%;
+      height: 100vh;
+      display: block;
+      /*border-right:1px solid #000000;*/
+    }
+    #text-canvas {
+      width: 100%;
+      height: 100vh;
+      display: block;
+      position: absolute;
+      left: 0px;
+      top: 0px;
+    }
+    #signText {
+      font-size: 26px;
+    }
+    .textblock {
+        margin-bottom: 1em;
+    }
+    #parameters {
+      text-align: right;
+    }
+    p {
+    }
+
+    .katex { font-size: 1em !important; }
+  </style>
+  <table class="canvasContainer">
+    <tr>
+      <td id="containerGreen">
+        <canvas class="canvas" id="Vectors3D-canvas" width="800" height="600"></canvas>
+        <div id="signText"></div>
+        <canvas class="canvas" id="text-canvas" width="800" height="600"></canvas>
+      </td>
+      <td id="tdInfo" width=10>
+        <div id="containerYellow">
+          <!-- <h3 id="conditionsHeading">Условия задачи:</h3> -->
+          <div id="conditions" class="textblock"> </div>
+          <!-- <h3 id="algorithmHeading">Алгоритм решения:</h3> -->
+          <div id="algorithm" class="textblock"> </div>
+          <div id="variants" class="textblock"> </div>
+          <div id="answer" class="textblock"> </div>
+          <div id="description" class="textblock"> </div>
+          <div id="parameters" class="textblock"> </div>
+          <p id="fps"></p>
+        </div>
+      </td>
+    </tr>
+  </table>
+</body>
+
+</html>

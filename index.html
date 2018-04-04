@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+<title>Примеры для квантов</title>
+<meta charset="utf-8">
+
+<script type="text/javascript" src="js/glMatrix-0.9.5.min.js"></script>
+<script type="text/javascript" src="js/webgl-utils.js"></script>
+<script type="text/javascript" src="js/earcut.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.17.0/math.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.css"
+      integrity="sha384-B41nY7vEWuDrE9Mr+J2nBL0Liu+nl/rBXTdpQal730oTHdlrlXHzYMOhDU60cwde" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.js"
+        integrity="sha384-L9gv4ooDLrYwW0QCM6zY3EKSSPrsuUncpx26+erN0pJX4wv1B1FzVW1SvpcJPx/8"
+        crossorigin="anonymous"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML'></script>
+
+<!-- <script type="text/javascript" async src="static/js/MathJax.js?config=TeX-AMS_CHTML"></script> -->
+
+<!-- <script type="text/javascript" src="static/js/jquery-2.2.3.min.js"></script> -->
+<!-- <link rel="stylesheet" href="static/js/katex/katex.min.css">
+<script src="static/js/katex/katex.min.js"></script>
+<script type="text/javascript" async src="static/js/MathJax.js?config=TeX-AMS_CHTML"></script> -->
+
+<script type="text/javascript" src="/static/js/jquery-2.2.3.min.js"></script>
+<!-- <link rel="stylesheet" href="/static/js/katex/katex.min.css">
+<script src="/static/js/katex/katex.min.js"></script>
+<script type="text/javascript" async src="/static/js/MathJax.js?config=TeX-AMS_CHTML"></script> -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+  TeX: {
+    equationNumbers: { autoNumber: "AMS" },
+    extensions: ["mhchem.js"]
+  }
+});
+</script>
+
+<script type="text/javascript" src="primitives.js"></script>
+<script id="vectorsScript" type="text/javascript"></script>
+<script id="loadarea" type="text/javascript"></script>
+
+<script id="shader-vs" type="x-shader/x-vertex">
+    #ifdef GL_ES
+    #  ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #  else
+    precision mediump float;
+    #  endif
+    #endif
+
+    attribute vec3 aVertexPosition;
+    attribute vec4 aVertexColor;
+    attribute vec3 aZoomVector;
+
+    uniform mat4 uMVMatrix;
+    uniform mat4 uPMatrix;
+    uniform float uZoomFactor;
+
+    varying vec4 vColor;
+
+    void main(void) {
+        vec3 zoomedVertexPosition = aVertexPosition+aZoomVector*(uZoomFactor-1.0);
+        gl_Position = uPMatrix * (uMVMatrix * vec4(zoomedVertexPosition,1.0));
+        vColor = aVertexColor;
+    }
+</script>
+<script id="shader-fs" type="x-shader/x-fragment">
+    #ifdef GL_ES
+    #  ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #  else
+    precision mediump float;
+    #  endif
+    #endif
+
+    varying vec4 vColor;
+
+    void main(void) {
+        gl_FragColor = vColor;
+    }
+</script>
+
+<script id="shader-stripe-vs" type="x-shader/x-vertex">
+    #ifdef GL_ES
+    #  ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #  else
+    precision mediump float;
+    #  endif
+    #endif
+
+    attribute vec3 aVertexPosition;
+    attribute vec4 aVertexColor;
+    attribute vec3 aZoomVector;
+    attribute float aLCoord;
+
+    uniform mat4 uMVMatrix;
+    uniform mat4 uPMatrix;
+    uniform float uZoomFactor;
+    uniform bool uOffset;
+
+    varying vec4 vColor;
+    varying float vLCoord;
+
+    void main(void) {
+        vec3 zoomedVertexPosition = aVertexPosition+aZoomVector*(uZoomFactor-1.0);
+        gl_Position = uPMatrix * (uMVMatrix * vec4(zoomedVertexPosition,1.0));
+
+        if (uOffset) {
+          gl_Position.z-= 1.0; // Offset
+        }
+        vColor = aVertexColor;
+        vLCoord = aLCoord/uZoomFactor;
+    }
+</script>
+<script id="shader-stripe-fs" type="x-shader/x-fragment">
+    #ifdef GL_ES
+    #  ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #  else
+    precision mediump float;
+    #  endif
+    #endif
+
+    varying vec4 vColor;
+    varying float vLCoord;
+
+    void main(void) {
+        // if (mod(vLCoord,34.0)>20.0) {
+        if (mod(vLCoord+5.0,17.0)>10.0) {
+            discard;
+        }
+        else {
+            gl_FragColor = vColor;
+        }
+    }
+</script>
+
+<script id="shader-texture-vs" type="x-shader/x-vertex">
+    #ifdef GL_ES
+    #  ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #  else
+    precision mediump float;
+    #  endif
+    #endif
+
+    attribute vec3 aVertexPosition;
+    attribute vec3 aNormal;
+    attribute vec2 aTextureCoord;
+
+    uniform mat4 uMVMatrix;
+    uniform mat4 uPMatrix;
+    uniform mat4 uWorldInverseTranspose;
+
+    varying vec3 vNormal;
+    varying vec2 vTextureCoord;
+
+    void main(void) {
+        vec4 modelViewSpacePos = uMVMatrix * vec4(aVertexPosition, 1.0);
+        gl_Position = uPMatrix * modelViewSpacePos;
+        vNormal = mat3(uWorldInverseTranspose) * aNormal;
+        vTextureCoord = aTextureCoord;
+    }
+</script>
+<script id="shader-texture-fs" type="x-shader/x-fragment">
+    #ifdef GL_ES
+    #  ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #  else
+    precision mediump float;
+    #  endif
+    #endif
+
+    varying vec3 vNormal;
+    varying vec2 vTextureCoord;
+    uniform vec3 uReverseLightDirection;
+
+    uniform sampler2D uSampler;
+
+    void main(void) {
+        gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+        vec3 normal = normalize(vNormal);
+        float light = 1.0;
+        if (length(normal) > 0.0) {
+            light = abs(dot(normal, uReverseLightDirection));
+        }
+        gl_FragColor.rgb *= light*(1.0-0.5)+0.5;
+    }
+</script>
+
+<script id="shader-light-vs" type="x-shader/x-vertex">
+    #ifdef GL_ES
+    #  ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #  else
+    precision mediump float;
+    #  endif
+    #endif
+
+    attribute vec3 aVertexPosition;
+    attribute vec3 aNormal;
+
+    uniform mat4 uMVMatrix;
+    uniform mat4 uPMatrix;
+    uniform mat4 uWorldInverseTranspose;
+
+    varying vec3 vNormal;
+
+    void main(void) {
+        vec4 modelViewSpacePos = uMVMatrix * vec4(aVertexPosition, 1.0);
+        gl_Position = uPMatrix * modelViewSpacePos;
+        vNormal = mat3(uWorldInverseTranspose) * aNormal;
+    }
+</script>
+<script id="shader-light-fs" type="x-shader/x-fragment">
+    #ifdef GL_ES
+    #  ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #  else
+    precision mediump float;
+    #  endif
+    #endif
+
+    varying vec3 vNormal;
+    uniform vec4 uColor;
+    uniform vec3 uReverseLightDirection;
+
+    void main(void) {
+        gl_FragColor = uColor;
+        vec3 normal = normalize(vNormal);
+        float light = 1.0;
+        if (length(normal) > 0.0) {
+            light = abs(dot(normal, uReverseLightDirection));
+        }
+        gl_FragColor.rgb *= light*(1.0-0.5)+0.5;
+    }
+</script>
+
+<script type="text/javascript">
+  Math.cosh = Math.cosh || function(x) {
+    var y = Math.exp(x);
+    return (y + 1 / y) / 2;
+  };
+  Math.sinh = Math.sinh || function(x) {
+    var y = Math.exp(x);
+    return (y - 1 / y) / 2;
+  }
+  var searchParam = decodeURI(window.location.search.substring(1));
+
+  var filename = "";
+  var testType = "";
+  var example_id = "";
+
+  if (searchParam!="") {
+    var parameters = searchParam.split('&');
+    for (var i = 0; i < parameters.length; i++) {
+      var param1 = parameters[i].split('=');
+      if (param1[0] === "file") filename = param1[1];
+      if (param1[0] === "type") testType = param1[1];
+      if (param1[0] === "example_id") example_id = param1[1];
+    }
+    if (filename!="") {
+      var scriptQuantum = document.createElement('script');
+      scriptQuantum.src = 'files/'+filename+'.js';
+      document.head.appendChild(scriptQuantum);
+
+      scriptQuantum.onload = function() {
+        var scriptEngine = document.createElement('script');
+        // if (dimention=="3d") {
+        //   scriptEngine.src = "vectors3d.js";
+        // }
+        // else {
+        //   scriptEngine.src = "vectors2d.js";
+        // }
+        scriptEngine.src = "vectors.js";
+        document.head.appendChild(scriptEngine);
+        scriptEngine.onload = function() {
+          webGLStart();
+        }
+      }
+    }
+  }
+</script>
+</head>
+
+
+<body >
+  <style>
+    body {
+      margin: 0px;
+      font-family: "Trebuchet MS",Tahoma,Arial,Helvetica,sans-serif;
+    }
+    label {
+      font-weight: normal !important;
+      display: block;
+      padding-top: 5px;
+    }
+    label:hover {
+      background: #f3fdff;
+    }
+    .whitelabel {
+      background: #ffffff;
+      padding-left: 5px;
+    }
+    .whitelabel:hover {
+      background: #DDE7E9;
+    }
+    .canvasContainer {
+      width: 100vw;
+      border-spacing: 0px;
+    }
+    .canvasContainer td {
+      padding: 0px;
+      vertical-align: top
+    }
+    #containerGreen {
+      position: relative;
+      overflow: hidden;
+      white-space: nowrap;
+      border-right:1px solid #bbb;
+    }
+    #containerYellow {
+      /*width: 300px;*/
+      min-width: 300px;
+      height:100vh;
+      background-color: #e7f1f3;
+      padding-left: 5px;
+      padding-right: 20px;
+      /*font-size: 20px; */
+      /*color: #555; */
+      font-size: 16px;
+      color: #272727;
+      overflow:auto;
+      overflow-y: overlay;
+      line-height: 1.5;
+    }
+    #Vectors3D-canvas {
+      width: 100%;
+      height: 100vh;
+      display: block;
+      /*border-right:1px solid #000000;*/
+    }
+    #text-canvas {
+      width: 100%;
+      height: 100vh;
+      display: block;
+      position: absolute;
+      left: 0px;
+      top: 0px;
+    }
+    #signText {
+      font-size: 26px;
+    }
+    #axisNumber {
+      font-size: 20px;
+      /*font-weight: 600;*/
+    }
+    .textblock {
+        margin-bottom: 1em;
+    }
+    #parameters {
+      text-align: right;
+    }
+    #controls {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+    }
+    p {
+    }
+
+    .katex { font-size: 1em !important; }
+  </style>
+  <table class="canvasContainer">
+    <tr>
+      <td id="containerGreen">
+        <canvas class="canvas" id="Vectors3D-canvas" width="800" height="600"></canvas>
+        <div id="signText"></div>
+        <canvas class="canvas" id="text-canvas" width="800" height="600"></canvas>
+      </td>
+      <td id="tdInfo" width=10>
+        <div id="containerYellow">
+          <!-- <h3 id="conditionsHeading">Условия задачи:</h3> -->
+          <div id="conditions" class="textblock"> </div>
+          <!-- <h3 id="algorithmHeading">Алгоритм решения:</h3> -->
+          <div id="algorithm" class="textblock"> </div>
+          <div id="variants" class="textblock"> </div>
+          <div id="answer" class="textblock"> </div>
+          <div id="description" class="textblock"> </div>
+          <div id="parameters" class="textblock"> </div>
+          <p id="fps"></p>
+        </div>
+      </td>
+    </tr>
+  </table>
+</body>
+
+</html>

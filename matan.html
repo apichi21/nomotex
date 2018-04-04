@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <title>Математический анализ</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <style>
+    .content {background: #fff; color: #373737; border:1px solid #CCC}
+    .content > div {display: none; padding: 10px 15px 5px}
+
+    .main input {display: none;}
+    label {display: inline-block; padding: 5px 10px; font-weight: 600; text-align: center; background-color: #eee; border:1px solid #CCC;
+      bottom: -1px;
+      position:relative;}
+    label:hover {cursor: pointer}
+    input:checked + label {background: #fff; border-bottom:1px solid #fff}
+
+    #tab1:checked ~ .content #math,
+    #tab2:checked ~ .content #tech,
+    #tab3:checked ~ .content #tasks {
+      display: block;
+    }
+    </style>
+</head>
+
+<body>
+<div class="main">
+
+  <input id="tab1" type="radio" name="tabs" checked>
+  <label for="tab1">Мат. примеры</label>
+
+  <input id="tab2" type="radio" name="tabs">
+  <label for="tab2">Инж. примеры</label>
+
+  <input id="tab3" type="radio" name="tabs">
+  <label for="tab3">Задачи</label>
+
+
+  <div class="content">
+
+  <div id="math">
+    <a href="index.html?file=Бесконечно малые последовательности">Бесконечно малые последовательности</a><br/>
+    <a href="index.html?file=Последовательность">Последовательность</a><br/>
+    <a href="index.html?file=Числа Фибоначчи">Числа Фибоначчи</a><br/>
+    <a href="index.html?file=Предел последовательности">Предел последовательности</a><br/>
+    <!-- Пример записи -->
+    <!-- <a href="index.html?file=имя файла примера">имя файла примера</a><br/> -->
+    <br/>
+  </div>
+
+  <div id='tech'>
+    <!-- Пример записи -->
+    <!-- <a href="index.html?file=имя файла примера">имя файла примера</a><br/> -->
+    <br/>
+  </div>
+
+  <div id="tasks">
+    <!-- Пример записи для задач -->
+    <!-- <a href="index.html?file=tasks/имя файла задачи&type=1&example_id=1">имя файла задачи. Семинар</a><br/>
+    <a href="index.html?file=tasks/имя файла задачи&type=2&example_id=1">имя файла задачи. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/имя файла задачи&type=3&example_id=1">имя файла задачи. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/имя файла задачи&type=4&example_id=1">имя файла задачи. Контрольная</a><br/><br/> -->
+    <br/>
+  </div>
+
+
+</div>
+</div>
+    </body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <title>linal</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <style>
+    .content {background: #fff; color: #373737; border:1px solid #CCC}
+    .content > div {display: none; padding: 10px 15px 5px}
+
+    .main input {display: none;}
+    label {display: inline-block; padding: 5px 10px; font-weight: 600; text-align: center; background-color: #eee; border:1px solid #CCC;
+      bottom: -1px;
+      position:relative;}
+    label:hover {cursor: pointer}
+    input:checked + label {background: #fff; border-bottom:1px solid #fff}
+
+    #tab1:checked ~ .content #qwantaLA,
+    #tab3:checked ~ .content #techLA,
+    #tab2:checked ~ .content #tasksLA {
+      display: block;
+    }
+    </style>
+</head>
+
+<body>
+<div class="main">
+
+  <input id="tab1" type="radio" name="tabs" checked>
+  <label for="tab1">ЛА Примеры</label>
+
+  <input id="tab2" type="radio" name="tabs">
+  <label for="tab2">ЛА Задачи</label>
+
+  <input id="tab3" type="radio" name="tabs">
+  <label for="tab3">ЛА Инж. примеры</label>
+
+
+  <div class="content">
+
+  <div id="tasksLA">
+    <a href="index.html?file=tasks/LA_Task01&type=1&example_id=1">ЛА Задача 1. Семинар</a><br/>
+    <a href="index.html?file=tasks/LA_Task01&type=2&example_id=1">ЛА Задача 1. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/LA_Task01&type=3&example_id=1">ЛА Задача 1. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/LA_Task01&type=4&example_id=1">ЛА Задача 1. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/LA_Task02&type=1&example_id=1">ЛА Задача 2. Семинар</a><br/>
+    <a href="index.html?file=tasks/LA_Task02&type=2&example_id=1">ЛА Задача 2. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/LA_Task02&type=3&example_id=1">ЛА Задача 2. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/LA_Task02&type=4&example_id=1">ЛА Задача 2. Контрольная</a><br/><br/>
+
+    <a href="index.html?file=tasks/LA_Task03&type=1&example_id=1">ЛА Задача 3. Семинар</a><br/>
+    <a href="index.html?file=tasks/LA_Task03&type=2&example_id=1">ЛА Задача 3. Домашнее задание</a><br/>
+    <a href="index.html?file=tasks/LA_Task03&type=3&example_id=1">ЛА Задача 3. Самостоятельная</a><br/>
+    <a href="index.html?file=tasks/LA_Task03&type=4&example_id=1">ЛА Задача 3. Контрольная</a><br/><br/>
+  </div>
+
+  <div id='techLA'>
+    <a href="index.html?file=3.01.05.01-plane">3.01.05.01 Самолёт</a><br/>
+    <a href="index.html?file=3.01.05.02-plane">3.01.05.02 Самолёт</a><br/>
+    <a href="index.html?file=3.01.05.03-plane">3.01.05.03 Самолёт</a><br/>
+    <a href="index.html?file=3.01.09.06-plane">3.01.09.06 Самолёт</a><br/><br/>
+
+    <a href="index.html?file=03.01.02.05 engineering">03.01.02.05 инженерный</a><br/>
+    <br/>
+  </div>
+
+
+  <div id="qwantaLA">
+    <b>Полноценные примеры:</b><br/>
+    <a href="index.html?file=03.01.02.03 1">03.01.02.03 1</a><br/>
+    <a href="index.html?file=03.01.02.03 2">03.01.02.03 2</a><br/>
+    <a href="index.html?file=03.01.02.03 3">03.01.02.03 3</a><br/>
+    <a href="index.html?file=03.01.02.05">03.01.02.05</a><br/><br/>
+
+    <a href="index.html?file=03.01.04.01">03.01.04.01</a><br/>
+    <a href="index.html?file=03.01.04.04 1">03.01.04.04 1</a><br/>
+    <a href="index.html?file=03.01.04.04 4">03.01.04.04 4</a><br/><br/>
+
+    <b>Текстовые примеры:</b><br/>
+    <a href="index.html?file=03.01.01.01 1">03.01.01.01 1</a><br/>
+    <a href="index.html?file=03.01.01.01 2">03.01.01.01 2</a><br/>
+    <a href="index.html?file=03.01.01.01 3">03.01.01.01 3</a><br/>
+    <a href="index.html?file=03.01.01.01 4">03.01.01.01 4</a><br/><br/>
+
+    <a href="index.html?file=03.01.04.04 2">03.01.04.04 2</a><br/>
+    <a href="index.html?file=03.01.04.04 3">03.01.04.04 3</a><br/><br/>
+
+    <a href="index.html?file=03.01.08.01 1">03.01.08.01 1</a><br/>
+    <a href="index.html?file=03.01.08.01 2">03.01.08.01 2</a><br/>
+    <a href="index.html?file=03.01.08.01 3">03.01.08.01 3</a><br/>
+    <a href="index.html?file=03.01.08.01 4">03.01.08.01 4</a><br/>
+    <a href="index.html?file=03.01.08.02 1">03.01.08.02 1</a><br/>
+    <a href="index.html?file=03.01.08.02 2">03.01.08.02 2</a><br/>
+    <a href="index.html?file=03.01.08.02 3">03.01.08.02 3</a><br/><br/>
+
+    <a href="index.html?file=03.01.09.08">03.01.09.08</a><br/><br/>
+    <a href="index.html?file=03.01.10.02 1">03.01.10.02 1</a><br/>
+    <a href="index.html?file=03.01.10.02 2">03.01.10.02 2</a><br/>
+    <a href="index.html?file=03.01.10.02 3">03.01.10.02 3</a><br/>
+    <a href="index.html?file=03.01.10.03 1">03.01.10.03 1</a><br/>
+    <a href="index.html?file=03.01.10.03 2">03.01.10.03 2</a><br/>
+    <a href="index.html?file=03.01.10.03 3">03.01.10.03 3</a><br/><br/>
+
+    <a href="index.html?file=03.01.12.04">03.01.12.04</a><br/>
+    <a href="index.html?file=03.01.12.05">03.01.12.05</a><br/><br/>
+
+    <a href="index.html?file=03.01.13.09">03.01.13.09</a><br/><br/>
+
+    <a href="index.html?file=03.01.14.04">03.01.14.04</a><br/><br/>
+
+    <a href="index.html?file=03.01.15.06">03.01.15.06</a><br/><br/>
+
+    <a href="index.html?file=03.01.16.08">03.01.16.08</a><br/><br/>
+
+    <a href="index.html?file=03.01.17.04">03.01.17.04</a><br/>
+    <a href="index.html?file=03.01.17.05">03.01.17.05</a><br/><br/>
+
+    <a href="index.html?file=03.01.18.02 1">03.01.18.02 1</a><br/>
+    <a href="index.html?file=03.01.18.02 2">03.01.18.02 2</a><br/>
+    <a href="index.html?file=03.01.18.03">03.01.18.03</a><br/>
+    <br/>
+  </div>
+</div>
+</div>
+    </body>
+</html>
