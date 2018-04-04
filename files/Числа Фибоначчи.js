@@ -150,7 +150,7 @@ function initData() {
         if (intervalCanacelId === -1) {
             intervalCanacelId = setInterval(function() {
                 initBuffers();
-            }, 1000);
+            }, 500);
         }
 
         for (let i = 0; i < currentDraw; i += 1) {

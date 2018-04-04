@@ -1,6 +1,6 @@
 let dimention = "2d";
 
-let sequenceType = "unit-series",
+let sequenceType = "sin",
     displayType = "numercal-axis";
 
 let w = 1.0,
@@ -81,22 +81,7 @@ function initDescr() {
 <div class="header">Выберите ряд:</div>    
 <form name="sequence">
 	<div class="form-group">
-		<input id="unit-series"  type="radio" name="sequence-type" checked>
-        <label for="unit-series">Натуральный ряд</label>
-    </div>
-    <div class="sequence" data-sequence-type="unit-series">
-	        $a_n=n$, $n\\in N$
-    </div>
-	<div class="form-group">
-		<input id="harmonic" type="radio" name="sequence-type" >
-		<label for="harmonic">Гармонический ряд</label>
-    </div>
-    <div class="sequence" data-sequence-type="harmonic">
-	    $a_n=\\frac{1}{n}$, $n\\in N$<br>
-	    $1, \\frac{1}{2}, \\frac{1}{3}, \\frac{1}{4}, ..., \\frac{1}{n}, ...$
-    </div>
-	<div class="form-group">
-		<input id="sin"  type="radio" name="sequence-type">
+		<input id="sin"  type="radio" name="sequence-type" checked>
 		<label for="sin">Синусоидальная последовательность</label>
     </div>
     <div class="sequence" data-sequence-type="sin">
@@ -174,9 +159,10 @@ const pointColor = [1.0, 0.647, 0.0, 1.0],
     chosenPointRad = 6;
 
 function initData() {
-    if (arrPoint != 0) {
-        if (points[0].coord1[0] > points[1].coord1[0] - 0.5)
+    if (arrPoint != 0.0) {
+        if (points[0].coord1[0] > points[1].coord1[0] - 0.5) {
             points[0].coord1[0] = points[1].coord1[0] - 0.5;
+        }
 
         points[0].coord1[1] = 0;
         points[0].coord1[2] = 0;
@@ -187,12 +173,11 @@ function initData() {
         primitives.push({
             class: "point",
             text: "",
-            arr0: arrPoint,
-            rad: chosenPointRad,
+            arr0: [arrPoint[0], 0.0, 0.0],
+            rad: pointRad,
             color: [1.0, 0.0, 1.0, 1.0]
         });
     }
-
     xMin = points[0].coord1[0];
     xMax = points[1].coord1[0];
 
@@ -226,7 +211,7 @@ function initData() {
     });
 
     if (animate === true) {
-        if (computedObjects.length === 0) {
+        if (computedObjects.length == 0) {
             computePoints(computedObjects);
         }
 
@@ -256,17 +241,11 @@ function computePoints(data) {
     for (let i = 1; i <= n; i++) {
         let x = 0.0;
         switch (sequenceType) {
-            case "harmonic":
-                x = 1.0 / i;
-                break;
             case "sin":
                 x = Math.sin(w * i);
                 break;
             case "exp":
                 x = Math.exp(-b * i);
-                break;
-            case "unit-series":
-                x = i;
                 break;
         }
         if (displayType === "numercal-axis") {

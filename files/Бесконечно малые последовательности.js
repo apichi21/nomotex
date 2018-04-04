@@ -1,67 +1,72 @@
 //Размерность пространства в примере (2d или 3d)
 let dimention = "2d";
 
-let sequenceType = 'unit-series',
-    displayType = 'numercal-axis';
+let sequenceType = "1",
+    displayType = "numercal-axis";
 
-let xMin = -4, xMax = 4;
+let xMin = -4,
+    xMax = 4;
 let n = 10;
 
 function initPoints() {
     points = [];
-    points.push({coord1: vec3.create([xMin, 0.0, 0.0]), movable: "free"});
-    points.push({coord1: vec3.create([xMax, 0.0, 0.0]), movable: "free"});
-    points.push({coord1: vec3.create([0.0, 0.0, 0.0]), movable: "fixed"});
+    points.push({ coord1: vec3.create([xMin, 0.0, 0.0]), movable: "free" });
+    points.push({ coord1: vec3.create([xMax, 0.0, 0.0]), movable: "free" });
+    points.push({ coord1: vec3.create([0.0, 0.0, 0.0]), movable: "fixed" });
 }
 
 function applyCssStyles() {
-
-    $('.header').css({
-        'text-align': 'center',
-        'font-weight': 'bold',
+    $(".header").css({
+        "text-align": "center",
+        "font-weight": "bold"
     });
 
-    $('.flex-align-items').css({
-        'display': 'flex',
-        'align-items': 'center',
-        'justify-content': 'space-between',
-        'margin': '20px',
+    $(".flex-align-items").css({
+        display: "flex",
+        "align-items": "center",
+        "justify-content": "space-between",
+        margin: "20px"
     });
 
-    $('.sequence').css({
-        'border': '1px solid black',
-        'border-radius': '10px',
-        'padding': '15px',
-        'margin': '0 10px',
+    $(".sequence").css({
+        border: "1px solid black",
+        "border-radius": "10px",
+        padding: "15px",
+        margin: "0 10px"
     });
 
-
-    $('form[name=form-display-type]').each(function (idx, form) {
-        $(form).find('.form-group').each(function (idx, elem) {
-            elem.style.display = 'flex';
-            elem.style.justifyContent = 'space-between';
-            elem.style.alignItems = 'center';
-        });
+    $("form[name=form-display-type]").each(function(idx, form) {
+        $(form)
+            .find(".form-group")
+            .each(function(idx, elem) {
+                elem.style.display = "flex";
+                elem.style.justifyContent = "space-between";
+                elem.style.alignItems = "center";
+            });
     });
 
-    $('form[name=sequence]').each(function (idx, form) {
-        $(form).find('.form-group').each(function (idx, elem) {
-            elem.style.display = 'flex';
-            elem.style.justifyContent = 'space-between';
-            elem.style.alignItems = 'center';
-        });
+    $("form[name=sequence]").each(function(idx, form) {
+        $(form)
+            .find(".form-group")
+            .each(function(idx, elem) {
+                elem.style.display = "flex";
+                elem.style.justifyContent = "space-between";
+                elem.style.alignItems = "center";
+            });
     });
 
-
-    $('form[name=sequence]').change(function (e) {
-        $('body').find('.sequence').hide();
-        $(`#${e.target.name + e.target.id}`).show()
+    $("form[name=sequence]").change(function(e) {
+        $("body")
+            .find(".sequence")
+            .hide();
+        $(`#${e.target.name + e.target.id}`).show();
     });
-
 }
 
 function initDescr() {
-    $("#description").html('<div class="header">Примеры бесконечно малых последовательностей</div>');
+    $("#description").html(
+        '<div class="header">Примеры бесконечно малых последовательностей</div>'
+    );
 
     let parametershtml = `<div style="font-size: 16px">
 <div class="header">Докажите, что последовательности</div>
@@ -145,49 +150,70 @@ function initDescr() {
 </div>
 	`;
 
-    $('#parameters').html(parametershtml);
-    $('#execute-builds').click(function (e) {
-        sequenceType = $('form[name=sequence] :checked').attr('id');
-        displayType = $('form[name=form-display-type] :checked').attr('id');
-        n = +$('#n-input').val();
+    $("#parameters").html(parametershtml);
+    $("#execute-builds").click(function(e) {
+        sequenceType = $("form[name=sequence] :checked").attr("id");
+        displayType = $("form[name=form-display-type] :checked").attr("id");
+        n = +$("#n-input").val();
 
         initBuffers();
     });
 
     applyCssStyles();
 
-    $("Title").html('Пример бесконечно малых последовательностей');
+    $("Title").html("Пример бесконечно малых последовательностей");
 }
-
 
 function initData() {
     let pointRad = 5;
 
-    if (points[0].coord1[0] > points[1].coord1[0] - 0.5) points[0].coord1[0] = points[1].coord1[0] - 0.5;
+    if (arrPoint != 0.0) {
+        if (points[0].coord1[0] > points[1].coord1[0] - 0.5) {
+            points[0].coord1[0] = points[1].coord1[0] - 0.5;
+        }
+
+        points[0].coord1[1] = 0;
+        points[0].coord1[2] = 0;
+
+        points[1].coord1[1] = 0;
+        points[1].coord1[2] = 0;
+
+        primitives.push({
+            class: "point",
+            text: "",
+            arr0: [arrPoint[0], 0.0, 0.0],
+            rad: pointRad,
+            color: [1.0, 0.0, 1.0, 1.0]
+        });
+    }
 
     xMin = points[0].coord1[0];
     xMax = points[1].coord1[0];
 
     primitives.push({
-        class: 'point',
-        text: katex.renderToString(`x_{min}=${points[0].coord1[0].toPrecision(2)}`),
-        pos: 'ct',
+        class: "point",
+        text: katex.renderToString(
+            `x_{min}=${points[0].coord1[0].toPrecision(2)}`
+        ),
+        pos: "ct",
         arr0: vec3.create([points[0].coord1[0], 0.0, 0.0]),
         rad: pointRad,
         color: [0.0, 0.0, 1.0, 1.0]
     });
     primitives.push({
-        class: 'point',
-        text: katex.renderToString(`x_{max}=${points[1].coord1[0].toPrecision(2)}`),
-        pos: 'ct',
+        class: "point",
+        text: katex.renderToString(
+            `x_{max}=${points[1].coord1[0].toPrecision(2)}`
+        ),
+        pos: "ct",
         arr0: vec3.create([points[1].coord1[0], 0.0, 0.0]),
         rad: pointRad,
         color: [0.0, 0.0, 1.0, 1.0]
     });
     primitives.push({
-        class: 'point',
-        text: katex.renderToString('0'),
-        pos: 'rt',
+        class: "point",
+        text: katex.renderToString("0"),
+        pos: "rt",
         arr0: vec3.create([points[2].coord1[0], 0.0, 0.0]),
         rad: pointRad,
         color: [0.0, 0.0, 1.0, 1.0]
@@ -198,42 +224,42 @@ function initData() {
     for (let i = 1; i <= n; i++) {
         let x = 0.0;
         switch (sequenceType) {
-            case '1':
+            case "1":
                 x = Math.sin(i) / i ** 2;
                 break;
-            case '2':
+            case "2":
                 x = 1 / i;
                 break;
-            case '3':
+            case "3":
                 x = 1 / i ** 2;
                 break;
-            case '4':
+            case "4":
                 x = 1 / Math.sqrt(i);
                 break;
-            case '5':
+            case "5":
                 x = 1 / Math.log(i);
                 break;
         }
-        if (displayType === 'numercal-axis') {
+        if (displayType === "numercal-axis") {
             if (x >= xMin && x <= xMax) {
                 primitives.push({
-                    class: 'point',
+                    class: "point",
                     text: katex.renderToString(x.toPrecision(2).toString()),
-                    pos: 'rt',
+                    pos: "rt",
                     arr0: vec3.create([x, 0.0, 0.0]),
                     rad: pointRad,
-                    color: pointColor,
+                    color: pointColor
                 });
             }
-        } else if (displayType === 'func-form') {
+        } else if (displayType === "func-form") {
             if (i >= xMin && i <= xMax) {
                 primitives.push({
-                    class: 'point',
+                    class: "point",
                     text: katex.renderToString(x.toPrecision(2).toString()),
-                    pos: 'rt',
+                    pos: "rt",
                     arr0: vec3.create([i, x, 0.0]),
                     rad: pointRad,
-                    color: pointColor,
+                    color: pointColor
                 });
             }
         }

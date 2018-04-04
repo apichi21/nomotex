@@ -74,7 +74,7 @@ function applyCssStyles() {
 
 function initDescr() {
     $("#description").html(
-        '<div class="header">Примеры числовых последовательностей</div>'
+        '<div class="header">Примеры монотонных последовательностей</div>'
     );
 
     let parametershtml = `<div style="font-size: 16px">
@@ -86,14 +86,6 @@ function initDescr() {
     </div>
     <div class="sequence" data-sequence-type="unit-series">
 	        $a_n=n$, $n\\in N$
-    </div>
-	<div class="form-group">
-		<input id="harmonic" type="radio" name="sequence-type" >
-		<label for="harmonic">Гармонический ряд</label>
-    </div>
-    <div class="sequence" data-sequence-type="harmonic">
-	    $a_n=\\frac{1}{n}$, $n\\in N$<br>
-	    $1, \\frac{1}{2}, \\frac{1}{3}, \\frac{1}{4}, ..., \\frac{1}{n}, ...$
     </div>
 	<div class="form-group">
 		<input id="sin"  type="radio" name="sequence-type">
@@ -110,7 +102,6 @@ function initDescr() {
 		<input id="exp"  type="radio" name="sequence-type">
 		<label for="exp">Экспотенциальная последовательность</label>
     </div>
-    
     <div class="sequence" data-sequence-type="exp">
         $a_n = \\exp(-b n)$, $n \\in N, b \\in \\mathbb{R}$
         <div class="flex-align-items">
@@ -226,7 +217,7 @@ function initData() {
     });
 
     if (animate === true) {
-        if (computedObjects.length === 0) {
+        if (computedObjects.length == 0) {
             computePoints(computedObjects);
         }
 
@@ -256,9 +247,6 @@ function computePoints(data) {
     for (let i = 1; i <= n; i++) {
         let x = 0.0;
         switch (sequenceType) {
-            case "harmonic":
-                x = 1.0 / i;
-                break;
             case "sin":
                 x = Math.sin(w * i);
                 break;
