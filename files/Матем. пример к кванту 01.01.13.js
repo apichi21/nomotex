@@ -1,21 +1,28 @@
 //Размерность пространства в примере (2d или 3d)
 let dimention = "2d";
 
-let figureType = 'circle';
+let figureType = 'hyperbola-inside';
 
-let R = 3;
-let x0 = 1, y0 = 1;
-let numberOfHatch = 21;
-let numberOfTriangles = 10;
-let rangeOfFilling = 100;
+let a = 1;
+let x1 = -1, y1 = 1;
+let x2 = 1, y2 = 2;
+let c = Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) / 2;
+let b = Math.sqrt(c ** 2 - a ** 2);
+
+let y0 = (y2 * x1 - y1 * x2) / (x1 - x2);
+
+const numberOfHatch = 21;
+const numberOfTriangles = 10;
+const rangeOfFilling = 100;
+const NUMBER_OF_LINES = 80;
+
+let x0 = 0;
 
 function initPoints() {
     points = [];
-    points.push({coord1: vec3.create([x0, 0.0, 0.0]), movable: "fixed"});
-    points.push({coord1: vec3.create([0.0, y0, 0.0]), movable: "fixed"});
     points.push({coord1: vec3.create([0.0, 0.0, 0.0]), movable: "fixed"});
-    points.push({coord1: vec3.create([x0, y0, 0.0]), movable: "free"});
-    points.push({coord1: vec3.create([x0, y0 + R, 0.0]), movable: "line", vector: vec3.create([0, 1, 0])});
+    points.push({coord1: vec3.create([x1, y1, 0.0]), movable: "free"});
+    points.push({coord1: vec3.create([x2, y2, 0.0]), movable: "free"});
 }
 
 function applyCssStyles() {
@@ -49,30 +56,18 @@ function applyCssStyles() {
 }
 
 function initDescr() {
-    $("#description").html('<div class="header">Изображение окружности, внутренности и внешности круга на комплексной плоскости</div>');
+    $("#description").html('<div class="header">Изображение области, ограниченной ветвью гиперболы на комплексной плоскости</div>');
 
     let parametershtml = `<div style="font-size: 16px">
 <div class="header">Выберите:</div>
 <form name="figure">
 	<div class="form-group">
-		<input id="circle" type="radio" name="fig" checked>
-		<label for="circle">Окружность: <br>$ |z - z_0| = R $</label>
+		<input id="hyperbola-inside" type="radio" name="fig" checked>
+		<label for="hyperbola-inside">$ |z - z_1| - |z - z_2| \\geq 2a $</label>
 	</div>
 	<div class="form-group">
-		<input id="circle-inside" type="radio" name="fig" >
-		<label for="circle-inside">Внутренность круга:  <br>$ |z - z_0| < R $</label>
-	</div>
-	<div class="form-group">
-		<input id="circle-outside"  type="radio" name="fig">
-		<label for="circle-outside">Внешность круга: <br>$ |z - z_0| > R $</label>
-	</div>
-	<div class="form-group">
-		<input id="circle-inside-border"  type="radio" name="fig">
-		<label for="circle-inside-border">Внутренность круга с границей: $ |z - z_0| \\leq R $</label>
-	</div>
-	<div class="form-group">
-		<input id="circle-outside-border"  type="radio" name="fig">
-		<label for="circle-outside-border">Внешность круга с границей: $ |z - z_0| \\geq R $</label>
+		<input id="hyperbola-outside" type="radio" name="fig" >
+		<label for="hyperbola-outside">$ |z - z_1| - |z - z_2| < 2a $</label>
 	</div>
 </div>
 </form>
@@ -81,22 +76,32 @@ function initDescr() {
 <br><br>
 
 <div class="figure" id="fig">
-	где $ R \\in \\mathbb{{R}} $,<br>$ z = x + i \\cdot y $,<br>$ z_0 = x_0 + i \\cdot y_0 $
+	где $ z = x + i \\cdot y $,<br>$ z_1 = x_1 + i \\cdot y_1 $,<br>$ z_2 = x_2 + i \\cdot y_2 $
 </div>
 
 <div class="flex-align-items">
-	<label for="x0-input" >$x_0:$</label>
-	<input type="text" id="x0-input" value="1">
+	<label for="x1-input" >$x_1:$</label>
+	<input type="text" id="x1-input" value="-1">
 </div>
 
 <div class="flex-align-items">
-	<label for="y0-input" >$y_0:$</label>
-	<input type="text" id="y0-input" value="1">
+	<label for="y1-input" >$y_1:$</label>
+	<input type="text" id="y1-input" value="1">
 </div>
 
 <div class="flex-align-items">
-	<label for="r-input" >$R:$</label>
-	<input type="text" id="r-input" value="3">
+	<label for="x2-input" >$x_2:$</label>
+	<input type="text" id="x2-input" value="2">
+</div>
+
+<div class="flex-align-items">
+	<label for="y2-input" >$y_2:$</label>
+	<input type="text" id="y2-input" value="2">
+</div>
+
+<div class="flex-align-items">
+	<label for="a-input" >$a:$</label>
+	<input type="text" id="a-input" value="3">
 </div>
 
 <br><br>
@@ -108,17 +113,20 @@ function initDescr() {
     $('#parameters').html(parametershtml);
     $('#execute-builds').click(function (e) {
         figureType = $('form[name=figure] :checked').attr('id');
-        x0 = points[3].coord1[0] = +$('#x0-input').val();
-        y0 = points[3].coord1[1] = +$('#y0-input').val();
-        R = +$('#r-input').val();
-        points[4].coord1[1] = R + y0;
-        points[4].coord1[0] = x0;
+        x1 = +$('#x1-input').val();
+        y1 = +$('#y1-input').val();
+        x2 = +$('#x2-input').val();
+        y2 = +$('#y2-input').val();
+        a = +$('#a-input').val();
+        y0 = (y2 * x1 - y1 * x2) / (x1 - x2);
+        points[1].coord1 = vec3.create([x1, y1, 0]);
+        points[2].coord1 = vec3.create([x2, y2, 0]);
         initBuffers();
     });
 
     applyCssStyles();
 
-    $("Title").html('Изображение окружности, внутренности и внешности круга на комплексной области');
+    $("Title").html('Изображение области, ограниченной ветвью гиперболы на комплексной области');
 }
 
 
@@ -127,142 +135,57 @@ function initData() {
     let chosenPointRad = 5;
     let lineRad = 2;
     let pointColor = [1.0, 0.0, 0.0, 1.0];
-    let circleColor = [0.0, 0.0, 1.0, 1.0];
+    let figureColor = [0.0, 0.0, 1.0, 1.0];
     let dashColor = [0.7, 0.7, 0.0, 1.0];
     let arrowColor = [0.0, 1.0, 0.0, 1.0];
     let fillingcolor = [0.5, 0.5, 1.0, 0.35];
 
-    let center = points[3].coord1;
-
-
-    if (arrPoint != 0) {
-        primitives.push({class: "point", text: "", arr0: arrPoint, rad: chosenPointRad, color: [1.0, 0.0, 1.0, 1.0]});
-        if (arrPoint == points[3].coord1) {
-            x0 = points[3].coord1[0];
-            y0 = points[3].coord1[1];
-            points[4].coord1 = vec3.create([x0, y0 + R, 0.0]);
-            $('#x0-input').val(center[0].toPrecision(2).toString());
-            $('#y0-input').val(center[1].toPrecision(2).toString());
-        }
-        if (arrPoint == points[4].coord1) {
-            R = Math.abs(points[4].coord1[1] - y0);
-            $('#r-input').val(R.toPrecision(2).toString());
-        }
-    }
+    let beginx, beginy, endx, endy;
 
     primitives.push({
         class: 'point',
-        text: katex.renderToString(`x_{0}=${x0.toPrecision(2)}`),
+        text: '',
         pos: 'ct',
-        arr0: vec3.create([x0, 0.0, 0.0]),
-        rad: pointRad,
-        color: pointColor
-    });
-    primitives.push({
-        class: 'point',
-        text: katex.renderToString(`y_{0}=${y0.toPrecision(2)}`),
-        pos: 'rt',
-        arr0: vec3.create([0.0, y0, 0.0]),
-        rad: pointRad,
-        color: pointColor
-    });
-    primitives.push({
-        class: 'point',
-        text: katex.renderToString('0'),
-        pos: 'rt',
-        arr0: vec3.create([points[2].coord1[0], 0.0, 0.0]),
-        rad: pointRad,
-        color: pointColor
-    });
-    primitives.push({
-        class: 'point',
-        text: katex.renderToString(`x=${(R + x0).toPrecision(2)}`),
-        pos: 'lt',
-        arr0: vec3.create([x0 + R, 0.0, 0.0]),
-        rad: pointRad,
-        color: pointColor
-    });
-    primitives.push({
-        class: 'point',
-        text: katex.renderToString(`y=${(R + y0).toPrecision(2)}`),
-        pos: 'rt',
-        arr0: vec3.create([0.0, y0 + R, 0.0]),
-        rad: pointRad,
-        color: pointColor
-    });
-    // Point increases R
-    primitives.push({
-        class: 'point',
-        text: '',
-        pos: 'rt',
-        arr0: points[4].coord1,
+        arr0: points[1].coord1,
         rad: pointRad,
         color: pointColor
     });
     primitives.push({
         class: 'point',
         text: '',
-        pos: 'rt',
-        arr0: vec3.create([x0 + R, y0, 0.0]),
-        rad: pointRad,
-        color: pointColor
-    });
-    // Center
-    primitives.push({
-        class: 'point',
-        text: katex.renderToString(`(${x0.toPrecision(2)}, ${y0.toPrecision(2)})`),
-        pos: 'lt',
-        arr0: center,
+        pos: 'ct',
+        arr0: points[2].coord1,
         rad: pointRad,
         color: pointColor
     });
     primitives.push({
-        class: 'dashline',
+        class: 'line',
         text: '',
-        pos: 'rt',
-        arr0: vec3.create([x0, 0.0, 0.0]),
-        arr1: center,
-        rad: 1.2,
-        color: dashColor
-    });
-    primitives.push({
-        class: 'dashline',
-        text: '',
-        pos: 'rt',
-        arr0: vec3.create([0.0, y0, 0.0]),
-        arr1: center,
-        rad: 1.2,
-        color: dashColor
-    });
-    primitives.push({
-        class: 'dashline',
-        text: '',
-        pos: 'rt',
-        arr0: vec3.create([x0 + R, 0.0, 0.0]),
-        arr1: vec3.create([x0 + R, y0, 0.0]),
-        rad: 1.2,
-        color: dashColor
-    });
-    primitives.push({
-        class: 'dashline',
-        text: '',
-        pos: 'rt',
-        arr0: vec3.create([0.0, y0 + R, 0.0]),
-        arr1: vec3.create([x0, y0 + R, 0.0]),
-        rad: 1.2,
-        color: dashColor
-    });
-    primitives.push({
-        class: 'arrow',
-        text: katex.renderToString(`R=${R.toPrecision(2)}`),
-        pos: 'lt',
-        arr0: center,
-        arr1: vec3.create([x0 + 0.5 * R, Math.sqrt(R ** 2 - (0.5 * R) ** 2) + y0, 0.0]),
+        pos: 'ct',
+        arr0: points[1].coord1,
+        arr1: points[2].coord1,
         rad: lineRad,
         color: arrowColor
     });
 
-    let beginx, beginy, endx, endy;
+    let vertices = [];
+    for (var i = 0; i <= NUMBER_OF_LINES; i++) {
+        var psi = (i / NUMBER_OF_LINES - 0.5) * 5;
+        let newx = a * Math.cosh(psi);
+        let newy = b * Math.sinh(psi);
+        vertices.push([newx, newy, 0.0]);
+    }
+    for (var i = 0; i < vertices.length - 1; i++) {
+        primitives.push({
+            class: "line",
+            text: "",
+            arr0: vertices[i],
+            arr1: vertices[i + 1],
+            rad: lineRad,
+            color: [0.0, 0.0, 1.0, 1.0]
+        });
+    }
+
 
     function fillingInside() {
         for (let i = 0; i < 2 * numberOfTriangles; i++) {
