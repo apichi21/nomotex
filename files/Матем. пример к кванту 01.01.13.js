@@ -1,7 +1,7 @@
 //Размерность пространства в примере (2d или 3d)
 let dimention = "2d";
 
-const FIGURE_SIZE = 6.5;
+const FIGURE_SIZE = 12;
 const NUMBER_OF_LINES = 80;
 
 let figureType = 'hyperbola-inside';
@@ -41,20 +41,15 @@ function move(a) {
 
 function unmove(a) {
     var p = [],
-        r = [],
         out = vec3.create();
 
-    p[0] = a[0] - 2 * center[0];
-    p[1] = a[1] - 2 * center[1];
-    p[2] = a[2] - 2 * center[2];
+    p[0] = a[0] - center[0];
+    p[1] = a[1] - center[1];
+    p[2] = a[2] - center[2];
 
-    r[0] = p[0] * Math.cos(-k) - p[1] * Math.sin(-k);
-    r[1] = p[0] * Math.sin(-k) + p[1] * Math.cos(-k);
-    r[2] = p[2];
-
-    out[0] = r[0] + center[0];
-    out[1] = r[1] + center[1];
-    out[2] = r[2] + center[2];
+    out[0] = p[0] * Math.cos(-k) - p[1] * Math.sin(-k);
+    out[1] = p[0] * Math.sin(-k) + p[1] * Math.cos(-k);
+    out[2] = p[2];
 
     return out;
 }
@@ -189,11 +184,14 @@ function initData() {
     const arrowColor = [0.0, 1.0, 0.0, 1.0];
     const fillingcolor = [0.5, 0.5, 1.0, 0.35];
 
-    let b = Math.sqrt(c * c - a * a);
+    let canvas_width = canvas.width;
+    let canvas_height = canvas.height;
 
     points[1].coord1 = vec3.create([x1, y1, 0]);
     points[2].coord1 = vec3.create([x2, y2, 0]);
     points[5].vector = [a, a * k, 0.0];
+
+    let b = Math.sqrt(c * c - a * a);
 
     if (arrPoint != 0) {
         primitives.push({class: "point", text: "", arr0: arrPoint, rad: chosenPointRad, color: [1.0, 0.0, 1.0, 1.0]});
@@ -202,6 +200,11 @@ function initData() {
             pointz[0] = pointz[0] / a;
             pointz[1] = pointz[1] / b;
             psiz = Math.asinh(pointz[1]);
+        }
+        if (arrPoint == points[5].coord1) {
+            a = unmove(points[5].coord1)[0];
+            b = Math.sqrt(c * c - a * a);
+            $('#a-input').val(a.toPrecision(2).toString());
         }
     }
 
@@ -268,6 +271,14 @@ function initData() {
         class: "dashline",
         text: "",
         arr0: move([-a * mult, -b * mult, 0]),
+        arr1: center,
+        rad: dashRad,
+        color: figureColor
+    });
+    primitives.push({
+        class: "dashline",
+        text: "",
+        arr0: center,
         arr1: move([a * mult, b * mult, 0]),
         rad: dashRad,
         color: figureColor
@@ -276,6 +287,14 @@ function initData() {
         class: "dashline",
         text: "",
         arr0: move([a * mult, -b * mult, 0]),
+        arr1: center,
+        rad: dashRad,
+        color: figureColor
+    });
+    primitives.push({
+        class: "dashline",
+        text: "",
+        arr0: center,
         arr1: move([-a * mult, b * mult, 0]),
         rad: dashRad,
         color: figureColor
@@ -317,14 +336,10 @@ function initData() {
 
 
     let vertices = [];
-    let bigHyperbola = [];
     for (let i = 0; i <= NUMBER_OF_LINES; i++) {
         let psi = (i / NUMBER_OF_LINES - 0.5) * FIGURE_SIZE;
         let x = a * Math.cosh(psi);
         let y = b * Math.sinh(psi);
-        let bigx = a * Math.cosh(psi * FIGURE_SIZE) - FIGURE_SIZE ** 3;
-        let bigy = b * Math.sinh(psi * FIGURE_SIZE) * FIGURE_SIZE;
-        bigHyperbola.push(move([bigx, bigy, 0.0]));
         vertices.push(move([x, y, 0.0]));
     }
     let centralPoint = vertices.length / 2 >> 0;
@@ -363,23 +378,22 @@ function initData() {
                     color: figureColor
                 });
             }
-            // filling outside
+            primitives.push({
+                class: "plane",
+                arr0: [-canvas_width, -canvas_height, 0.0],
+                arr1: [-canvas_width, canvas_height, 0.0],
+                arr2: [canvas_width, canvas_height, 0.0],
+                arr3: [canvas_width, -canvas_height, 0.0],
+                color: fillingcolor
+            });
             for (let i = 0; i < centralPoint; i++) {
                 primitives.push({
                     class: "plane",
                     arr0: vertices[centralPoint + i + 1],
                     arr1: vertices[centralPoint + i],
-                    arr2: bigHyperbola[centralPoint + i],
-                    arr3: bigHyperbola[centralPoint + i + 1],
-                    color: fillingcolor
-                });
-                primitives.push({
-                    class: "plane",
-                    arr0: vertices[centralPoint - i - 1],
-                    arr1: vertices[centralPoint - i],
-                    arr2: bigHyperbola[centralPoint - i],
-                    arr3: bigHyperbola[centralPoint - i - 1],
-                    color: fillingcolor
+                    arr2: vertices[centralPoint - i],
+                    arr3: vertices[centralPoint - i - 1],
+                    color: [1.0, 1.0, 1.0, 1.0]
                 });
             }
             break;
