@@ -11,6 +11,7 @@ let x1 = -3, y1 = 1;
 let x2 = 3, y2 = 2;
 let center = [(x1 + x2) / 2, (y1 + y2) / 2, 0.0];
 let c = Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) / 2;
+let b = Math.sqrt(c * c - a * a);
 let k = Math.atan((y2 - y1) / (x2 - x1));
 
 // rotate and translate figure
@@ -61,7 +62,8 @@ function initPoints() {
     points.push({coord1: vec3.create([x2, y2, 0.0]), movable: "fixed"});
     points.push({coord1: center, movable: "fixed"});
     points.push({coord1: vec3.create(), movable: "free"}); // z
-    points.push({coord1: move([a, 0.0, 0.0]), movable: "line", vector: [a, k * a, 0.0]}); // a
+    points.push({coord1: move([a, 0.0, 0.0]), movable: "line", vector: [a, k * a, 0.0]}); // A
+    points.push({coord1: move([0.0, b, 0.0]), movable: "line", vector: [b, -1 / k * b, 0.0]}); // B
 }
 
 function applyCssStyles() {
@@ -191,7 +193,7 @@ function initData() {
     points[2].coord1 = vec3.create([x2, y2, 0]);
     points[5].vector = [a, a * k, 0.0];
 
-    let b = Math.sqrt(c * c - a * a);
+    b = Math.sqrt(c * c - a * a);
 
     if (arrPoint != 0) {
         primitives.push({class: "point", text: "", arr0: arrPoint, rad: chosenPointRad, color: [1.0, 0.0, 1.0, 1.0]});
@@ -205,6 +207,13 @@ function initData() {
             a = unmove(points[5].coord1)[0];
             b = Math.sqrt(c * c - a * a);
             $('#a-input').val(a.toPrecision(2).toString());
+            points[6].coord1 = move([0.0, b, 0.0]);
+        }
+        if (arrPoint == points[6].coord1) {
+            b = unmove(points[6].coord1)[1];
+            a = Math.sqrt(c * c - b * b);
+            $('#a-input').val(a.toPrecision(2).toString());
+            points[5].coord1 = move([a, 0.0, 0.0]);
         }
     }
 
@@ -225,10 +234,19 @@ function initData() {
         rad: pointRad,
         color: figureColor
     });
+    // Line between focus
     primitives.push({
         class: 'line',
         arr0: points[1].coord1,
         arr1: points[2].coord1,
+        rad: lineRad,
+        color: arrowColor
+    });
+    // Line perpendicular focus line
+    primitives.push({
+        class: 'line',
+        arr0: move([(x1 + x2) / 2, b, 0.0]),
+        arr1: move([(x1 + x2) / 2, -b, 0.0]),
         rad: lineRad,
         color: arrowColor
     });
@@ -324,12 +342,21 @@ function initData() {
         rad: lineRad,
         color: dashColor
     });
-    // a
+    // A
     primitives.push({
         class: "point",
         text: katex.renderToString('A'),
         pos: 'rt',
         arr0: points[5].coord1,
+        rad: pointRad,
+        color: pointColor
+    });
+    // B
+    primitives.push({
+        class: "point",
+        text: katex.renderToString('B'),
+        pos: 'rt',
+        arr0: points[6].coord1,
         rad: pointRad,
         color: pointColor
     });
@@ -344,6 +371,40 @@ function initData() {
     }
     let centralPoint = vertices.length / 2 >> 0;
 
+    function fillingInside() {
+        for (let i = 0; i < centralPoint; i++) {
+            primitives.push({
+                class: "plane",
+                arr0: vertices[centralPoint + i + 1],
+                arr1: vertices[centralPoint + i],
+                arr2: vertices[centralPoint - i],
+                arr3: vertices[centralPoint - i - 1],
+                color: fillingcolor
+            });
+        }
+    }
+
+    function fillingOutside(){
+        primitives.push({
+            class: "plane",
+            arr0: [-canvas_width, -canvas_height, 0.0],
+            arr1: [-canvas_width, canvas_height, 0.0],
+            arr2: [canvas_width, canvas_height, 0.0],
+            arr3: [canvas_width, -canvas_height, 0.0],
+            color: fillingcolor
+        });
+        for (let i = 0; i < centralPoint; i++) {
+            primitives.push({
+                class: "plane",
+                arr0: vertices[centralPoint + i + 1],
+                arr1: vertices[centralPoint + i],
+                arr2: vertices[centralPoint - i],
+                arr3: vertices[centralPoint - i - 1],
+                color: [1.0, 1.0, 1.0, 1.0]
+            });
+        }
+    }
+
     switch (figureType) {
         case 'hyperbola-inside':
             for (var i = 0; i < vertices.length - 1; i++) {
@@ -355,19 +416,9 @@ function initData() {
                     color: figureColor
                 });
             }
-            // filling inside
-            for (let i = 0; i < centralPoint; i++) {
-                primitives.push({
-                    class: "plane",
-                    arr0: vertices[centralPoint + i + 1],
-                    arr1: vertices[centralPoint + i],
-                    arr2: vertices[centralPoint - i],
-                    arr3: vertices[centralPoint - i - 1],
-                    color: fillingcolor
-                });
-            }
+            if (a > 0) fillingInside();
+            else fillingOutside();
             break;
-
         case 'hyperbola-outside':
             for (var i = 0; i < vertices.length - 1; i += 2) {
                 primitives.push({
@@ -378,24 +429,8 @@ function initData() {
                     color: figureColor
                 });
             }
-            primitives.push({
-                class: "plane",
-                arr0: [-canvas_width, -canvas_height, 0.0],
-                arr1: [-canvas_width, canvas_height, 0.0],
-                arr2: [canvas_width, canvas_height, 0.0],
-                arr3: [canvas_width, -canvas_height, 0.0],
-                color: fillingcolor
-            });
-            for (let i = 0; i < centralPoint; i++) {
-                primitives.push({
-                    class: "plane",
-                    arr0: vertices[centralPoint + i + 1],
-                    arr1: vertices[centralPoint + i],
-                    arr2: vertices[centralPoint - i],
-                    arr3: vertices[centralPoint - i - 1],
-                    color: [1.0, 1.0, 1.0, 1.0]
-                });
-            }
+            if (a > 0) fillingOutside();
+            else fillingInside();
             break;
     }
 }
