@@ -99,10 +99,6 @@ function initDescr() {
 		<input type="number" id="n-input" value="${n}">
 	</div>	
 </form>
-
-<div style="display: flex; margin-top: 50px">
-	<button id="execute-builds" style="margin: auto">Выполнить построения!</button>
-</div>
 	`;
 
     $("#parameters").html(parametershtml);
@@ -110,7 +106,7 @@ function initDescr() {
     applyCssStyles();
     $("Title").html('Квант "Последовательность"');
 
-    $("#execute-builds").click(function(e) {
+    $(document.body).click(function(e) {
         displayType = $("input[name=display-type]:checked").attr("id");
         animate = $("input[name=animation-turn]").is(":checked");
         n = parseInt($("#n-input").val());

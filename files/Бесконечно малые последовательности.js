@@ -8,6 +8,11 @@ let xMin = -4,
     xMax = 4;
 let n = 10;
 
+let animate = false,
+    currentDraw = 0,
+    intervalCanacelId,
+    computedObjects = [];
+
 function initPoints() {
     points = [];
     points.push({ coord1: vec3.create([xMin, 0.0, 0.0]), movable: "free" });
@@ -25,14 +30,15 @@ function applyCssStyles() {
         display: "flex",
         "align-items": "center",
         "justify-content": "space-between",
-        margin: "20px"
+        margin: "10px"
     });
 
     $(".sequence").css({
         border: "1px solid black",
         "border-radius": "10px",
         padding: "15px",
-        margin: "0 10px"
+        margin: "0 5px",
+        "text-align": "center"
     });
 
     $("form[name=form-display-type]").each(function(idx, form) {
@@ -139,22 +145,26 @@ function initDescr() {
 		<label for="func-form">Изображение в виде функции</label>
 	</div>
 	<div class="form-group">
-		<input id="animation"  type="radio" name="display-type">
+		<input id="animation"  type="checkbox" name="animation-turn">
 		<label for="animation">Анимация</label>
 	</div>
 </form>
 </div>
-
-<div style="display: flex; margin-top: 50px">
-	<button id="execute-builds" style="margin: auto">Выполнить построения!</button>
-</div>
-	`;
+`;
 
     $("#parameters").html(parametershtml);
-    $("#execute-builds").click(function(e) {
+
+    $(document.body).click(function(e) {
         sequenceType = $("form[name=sequence] :checked").attr("id");
         displayType = $("form[name=form-display-type] :checked").attr("id");
         n = +$("#n-input").val();
+
+        animate = $("input[name=animation-turn]").is(":checked");
+        drawNumbres = $("input[name=numbers-turn]").is(":checked");
+        clearInterval(intervalCanacelId);
+        currentDraw = 0;
+        intervalCanacelId = -1;
+        computedObjects = [];
 
         initBuffers();
     });
@@ -164,9 +174,10 @@ function initDescr() {
     $("Title").html("Пример бесконечно малых последовательностей");
 }
 
-function initData() {
-    let pointRad = 5;
+const POINT_RAD = 5,
+    POINT_COLOR = [0.0, 0.0, 1.0, 1.0];
 
+function initData() {
     if (arrPoint != 0.0) {
         if (points[0].coord1[0] > points[1].coord1[0] - 0.5) {
             points[0].coord1[0] = points[1].coord1[0] - 0.5;
@@ -182,7 +193,7 @@ function initData() {
             class: "point",
             text: "",
             arr0: [arrPoint[0], 0.0, 0.0],
-            rad: pointRad,
+            rad: POINT_RAD,
             color: [1.0, 0.0, 1.0, 1.0]
         });
     }
@@ -197,8 +208,8 @@ function initData() {
         ),
         pos: "ct",
         arr0: vec3.create([points[0].coord1[0], 0.0, 0.0]),
-        rad: pointRad,
-        color: [0.0, 0.0, 1.0, 1.0]
+        rad: POINT_RAD,
+        color: [1.0, 0.0, 0.0, 1.0]
     });
     primitives.push({
         class: "point",
@@ -207,20 +218,38 @@ function initData() {
         ),
         pos: "ct",
         arr0: vec3.create([points[1].coord1[0], 0.0, 0.0]),
-        rad: pointRad,
-        color: [0.0, 0.0, 1.0, 1.0]
-    });
-    primitives.push({
-        class: "point",
-        text: katex.renderToString("0"),
-        pos: "rt",
-        arr0: vec3.create([points[2].coord1[0], 0.0, 0.0]),
-        rad: pointRad,
-        color: [0.0, 0.0, 1.0, 1.0]
+        rad: POINT_RAD,
+        color: [1.0, 0.0, 0.0, 1.0]
     });
 
-    let pointColor = [1.0, 94.0 / 255, 3.0 / 255, 1.0];
+    if (animate === true) {
+        if (computedObjects.length === 0) {
+            computePoints(computedObjects);
+        }
 
+        if (intervalCanacelId === -1) {
+            intervalCanacelId = setInterval(function() {
+                initBuffers();
+            }, 500);
+        }
+
+        for (let i = 0; i < currentDraw; i += 1) {
+            if (i < computedObjects.length) {
+                primitives.push(computedObjects[i]);
+            }
+        }
+
+        if (currentDraw >= computedObjects.length) {
+            clearInterval(intervalCanacelId);
+            intervalCanacelId = -1;
+        }
+        currentDraw += 1;
+    } else {
+        computePoints(primitives);
+    }
+}
+
+function computePoints(data) {
     for (let i = 1; i <= n; i++) {
         let x = 0.0;
         switch (sequenceType) {
@@ -242,24 +271,24 @@ function initData() {
         }
         if (displayType === "numercal-axis") {
             if (x >= xMin && x <= xMax) {
-                primitives.push({
+                data.push({
                     class: "point",
                     text: katex.renderToString(x.toPrecision(2).toString()),
                     pos: "rt",
                     arr0: vec3.create([x, 0.0, 0.0]),
-                    rad: pointRad,
-                    color: pointColor
+                    rad: POINT_RAD,
+                    color: POINT_COLOR
                 });
             }
         } else if (displayType === "func-form") {
             if (i >= xMin && i <= xMax) {
-                primitives.push({
+                data.push({
                     class: "point",
                     text: katex.renderToString(x.toPrecision(2).toString()),
                     pos: "rt",
                     arr0: vec3.create([i, x, 0.0]),
-                    rad: pointRad,
-                    color: pointColor
+                    rad: POINT_RAD,
+                    color: POINT_COLOR
                 });
             }
         }

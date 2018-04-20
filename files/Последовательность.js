@@ -15,8 +15,6 @@ let animate = false,
     intervalCanacelId,
     computedObjects = [];
 
-let currentPlaneDrawStep = 0;
-
 function initPoints() {
     points = [];
     points.push({ coord1: vec3.create([xMin, 0.0, 0.0]), movable: "free" });
@@ -146,14 +144,11 @@ function initDescr() {
 	</div>
 </form>
 </div>
-
-<div style="display: flex; margin-top: 50px">
-	<button id="execute-builds" style="margin: auto">Выполнить построения!</button>
-</div>
-	`;
+`;
 
     $("#parameters").html(parametershtml);
-    $("#execute-builds").click(function(e) {
+
+    $(document.body).click(function(e) {
         sequenceType = $("input[name=sequence-type]:checked").attr("id");
         displayType = $("form[name=form-display-type] :checked").attr("id");
         w = +$("#omega-input").val();
@@ -166,7 +161,6 @@ function initDescr() {
         currentDraw = 0;
         intervalCanacelId = -1;
         computedObjects = [];
-        currentPlaneDrawStep = 1;
         initBuffers();
     });
 

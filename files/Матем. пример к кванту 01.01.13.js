@@ -4,11 +4,13 @@ let dimention = "2d";
 const FIGURE_SIZE = 12;
 const NUMBER_OF_LINES = 80;
 
-let figureType = 'hyperbola-inside';
+let figureType = "hyperbola-inside";
 
 let a = 2.5;
-let x1 = -3, y1 = 1;
-let x2 = 3, y2 = 2;
+let x1 = -3,
+    y1 = 1;
+let x2 = 3,
+    y2 = 2;
 let center = [(x1 + x2) / 2, (y1 + y2) / 2, 0.0];
 let c = Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) / 2;
 let b = Math.sqrt(c * c - a * a);
@@ -23,7 +25,6 @@ function move(a) {
     a[0] = a[0] + center[0];
     a[1] = a[1] + center[1];
     a[2] = a[2] + center[2];
-
 
     p[0] = a[0] - center[0];
     p[1] = a[1] - center[1];
@@ -57,47 +58,60 @@ function unmove(a) {
 
 function initPoints() {
     points = [];
-    points.push({coord1: vec3.create([0.0, 0.0, 0.0]), movable: "fixed"});
-    points.push({coord1: vec3.create([x1, y1, 0.0]), movable: "fixed"});
-    points.push({coord1: vec3.create([x2, y2, 0.0]), movable: "fixed"});
-    points.push({coord1: center, movable: "fixed"});
-    points.push({coord1: vec3.create(), movable: "free"}); // z
-    points.push({coord1: move([a, 0.0, 0.0]), movable: "line", vector: [a, k * a, 0.0]}); // A
-    points.push({coord1: move([0.0, b, 0.0]), movable: "line", vector: [b, -1 / k * b, 0.0]}); // B
+    points.push({ coord1: vec3.create([0.0, 0.0, 0.0]), movable: "fixed" });
+    points.push({ coord1: vec3.create([x1, y1, 0.0]), movable: "fixed" });
+    points.push({ coord1: vec3.create([x2, y2, 0.0]), movable: "fixed" });
+    points.push({ coord1: center, movable: "fixed" });
+    points.push({ coord1: vec3.create(), movable: "free" }); // z
+    points.push({
+        coord1: move([a, 0.0, 0.0]),
+        movable: "line",
+        vector: [a, k * a, 0.0]
+    }); // A
+    points.push({
+        coord1: move([0.0, b, 0.0]),
+        movable: "line",
+        vector: [b, -1 / k * b, 0.0]
+    }); // B
 }
 
 function applyCssStyles() {
-
-    $('.header').css({
-        'text-align': 'center',
-        'font-weight': 'bold',
+    $(".header").css({
+        "text-align": "center",
+        "font-weight": "bold"
     });
 
-    $('.flex-align-items').css({
-        'display': 'flex',
-        'align-items': 'center',
-        'justify-content': 'space-between',
-        'margin': '20px',
+    $(".flex-align-items").css({
+        display: "flex",
+        "align-items": "center",
+        "justify-content": "space-between",
+        margin: "20px"
     });
 
-    $('.figure').css({
-        'border': '1px solid black',
-        'border-radius': '10px',
-        'padding': '15px',
-        'margin': '0 10px',
+    $(".figure").css({
+        border: "1px solid black",
+        "border-radius": "10px",
+        padding: "15px",
+        margin: "0 10px"
     });
 
-    $('form[name=figure]').each(function (idx, form) {
-        $(form).find('.form-group').each(function (idx, elem) {
-            elem.style.display = 'flex';
-            elem.style.justifyContent = 'space-between';
-            elem.style.alignItems = 'center';
-        });
+    $("form[name=figure]").each(function(idx, form) {
+        $(form)
+            .find(".form-group")
+            .each(function(idx, elem) {
+                elem.style.display = "flex";
+                elem.style.justifyContent = "space-between";
+                elem.style.alignItems = "center";
+            });
     });
 }
 
+function getParams() {}
+
 function initDescr() {
-    $("#description").html('<div class="header">Изображение области, ограниченной ветвью гиперболы на комплексной плоскости</div>');
+    $("#description").html(
+        '<div class="header">Изображение области, ограниченной ветвью гиперболы на комплексной плоскости</div>'
+    );
 
     let parametershtml = `<div style="font-size: 16px">
 <div class="header">Выберите:</div>
@@ -145,41 +159,47 @@ function initDescr() {
 	<label for="a-input" >$a:$</label>
 	<input type="text" id="a-input" value="${a}">
 </div>
-
-<br><br>
-<div style="display: flex; margin-top: 30px">
-	<button id="execute-builds" style="margin: auto">Выполнить построения</button>
-</div>
 	`;
 
-    $('#parameters').html(parametershtml);
-    $('#execute-builds').click(function (e) {
-        figureType = $('form[name=figure] :checked').attr('id');
-        x1 = +$('#x1-input').val();
-        y1 = +$('#y1-input').val();
-        x2 = +$('#x2-input').val();
-        y2 = +$('#y2-input').val();
-        a = +$('#a-input').val();
+    $("#parameters").html(parametershtml);
+    $(document.body).click(function(e) {
+        figureType = $("form[name=figure] :checked").attr("id");
+        x1 = +$("#x1-input").val();
+        y1 = +$("#y1-input").val();
+        x2 = +$("#x2-input").val();
+        y2 = +$("#y2-input").val();
+        a = +$("#a-input").val();
         c = Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) / 2;
+        b = Math.sqrt(c * c - a * a);
         if (a >= c) {
             a = c - 0.01;
-            $('#a-input').val(a.toPrecision(2).toString());
+            $("#a-input").val(a.toPrecision(2).toString());
         }
-        center = points[3].coord1 = vec3.create([(x1 + x2) / 2, (y1 + y2) / 2, 0.0]);
+        center = points[3].coord1 = vec3.create([
+            (x1 + x2) / 2,
+            (y1 + y2) / 2,
+            0.0
+        ]);
         k = Math.atan((y2 - y1) / (x2 - x1));
         points[5].coord1 = move([a, 0.0, 0.0]);
+        points[6].coord1 = move([0.0, b, 0.0]);
         initBuffers();
     });
 
     applyCssStyles();
 
-    $("Title").html('Изображение области, ограниченной ветвью гиперболы на комплексной области');
+    $("Title").html(
+        "Изображение области, ограниченной ветвью гиперболы на комплексной области"
+    );
 }
 
 let psiz = Math.PI / 4;
 
 function initData() {
-    const pointRad = 4, dashRad = 1.2, lineRad = 2, chosenPointRad = 5;
+    const pointRad = 4,
+        dashRad = 1.2,
+        lineRad = 2,
+        chosenPointRad = 5;
     const pointColor = [1.0, 0.0, 0.0, 1.0];
     const figureColor = [0.0, 0.0, 1.0, 1.0];
     const dashColor = [0.7, 0.7, 0.0, 1.0];
@@ -196,7 +216,13 @@ function initData() {
     b = Math.sqrt(c * c - a * a);
 
     if (arrPoint != 0) {
-        primitives.push({class: "point", text: "", arr0: arrPoint, rad: chosenPointRad, color: [1.0, 0.0, 1.0, 1.0]});
+        primitives.push({
+            class: "point",
+            text: "",
+            arr0: arrPoint,
+            rad: chosenPointRad,
+            color: [1.0, 0.0, 1.0, 1.0]
+        });
         if (arrPoint == points[4].coord1) {
             let pointz = unmove(points[4].coord1);
             pointz[0] = pointz[0] / a;
@@ -206,37 +232,40 @@ function initData() {
         if (arrPoint == points[5].coord1) {
             a = unmove(points[5].coord1)[0];
             b = Math.sqrt(c * c - a * a);
-            $('#a-input').val(a.toPrecision(2).toString());
+            $("#a-input").val(a.toPrecision(2).toString());
             points[6].coord1 = move([0.0, b, 0.0]);
         }
         if (arrPoint == points[6].coord1) {
             b = unmove(points[6].coord1)[1];
             a = Math.sqrt(c * c - b * b);
-            $('#a-input').val(a.toPrecision(2).toString());
+            $("#a-input").val(a.toPrecision(2).toString());
             points[5].coord1 = move([a, 0.0, 0.0]);
         }
     }
 
-    vec3.set(move([a * Math.cosh(psiz), b * Math.sinh(psiz), 0.0]), points[4].coord1);
+    vec3.set(
+        move([a * Math.cosh(psiz), b * Math.sinh(psiz), 0.0]),
+        points[4].coord1
+    );
     primitives.push({
-        class: 'point',
-        text: katex.renderToString('z_1'),
-        pos: 'ct',
+        class: "point",
+        text: katex.renderToString("z_1"),
+        pos: "ct",
         arr0: points[1].coord1,
         rad: pointRad,
         color: figureColor
     });
     primitives.push({
-        class: 'point',
-        text: katex.renderToString('z_2'),
-        pos: 'ct',
+        class: "point",
+        text: katex.renderToString("z_2"),
+        pos: "ct",
         arr0: points[2].coord1,
         rad: pointRad,
         color: figureColor
     });
     // Line between focus
     primitives.push({
-        class: 'line',
+        class: "line",
         arr0: points[1].coord1,
         arr1: points[2].coord1,
         rad: lineRad,
@@ -244,7 +273,7 @@ function initData() {
     });
     // Line perpendicular focus line
     primitives.push({
-        class: 'line',
+        class: "line",
         arr0: move([(x1 + x2) / 2, b, 0.0]),
         arr1: move([(x1 + x2) / 2, -b, 0.0]),
         rad: lineRad,
@@ -320,8 +349,8 @@ function initData() {
     // z
     primitives.push({
         class: "point",
-        text: katex.renderToString('z'),
-        pos: 'lt',
+        text: katex.renderToString("z"),
+        pos: "lt",
         arr0: points[4].coord1,
         rad: pointRad,
         color: [0.0, 0.0, 0.7, 1.0]
@@ -345,8 +374,8 @@ function initData() {
     // A
     primitives.push({
         class: "point",
-        text: katex.renderToString('A'),
-        pos: 'rt',
+        text: katex.renderToString("A"),
+        pos: "rt",
         arr0: points[5].coord1,
         rad: pointRad,
         color: pointColor
@@ -354,13 +383,12 @@ function initData() {
     // B
     primitives.push({
         class: "point",
-        text: katex.renderToString('B'),
-        pos: 'rt',
+        text: katex.renderToString("B"),
+        pos: "rt",
         arr0: points[6].coord1,
         rad: pointRad,
         color: pointColor
     });
-
 
     let vertices = [];
     for (let i = 0; i <= NUMBER_OF_LINES; i++) {
@@ -369,7 +397,7 @@ function initData() {
         let y = b * Math.sinh(psi);
         vertices.push(move([x, y, 0.0]));
     }
-    let centralPoint = vertices.length / 2 >> 0;
+    let centralPoint = (vertices.length / 2) >> 0;
 
     function fillingInside() {
         for (let i = 0; i < centralPoint; i++) {
@@ -384,7 +412,7 @@ function initData() {
         }
     }
 
-    function fillingOutside(){
+    function fillingOutside() {
         primitives.push({
             class: "plane",
             arr0: [-canvas_width, -canvas_height, 0.0],
@@ -406,7 +434,7 @@ function initData() {
     }
 
     switch (figureType) {
-        case 'hyperbola-inside':
+        case "hyperbola-inside":
             for (var i = 0; i < vertices.length - 1; i++) {
                 primitives.push({
                     class: "line",
@@ -419,7 +447,7 @@ function initData() {
             if (a > 0) fillingInside();
             else fillingOutside();
             break;
-        case 'hyperbola-outside':
+        case "hyperbola-outside":
             for (var i = 0; i < vertices.length - 1; i += 2) {
                 primitives.push({
                     class: "line",

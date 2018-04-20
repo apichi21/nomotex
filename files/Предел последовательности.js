@@ -5,10 +5,12 @@ let displayType = "numercal-axis";
 
 const a = 2;
 let n = 10,
-    epsilon = 3,
-    // epsilon = Math.abs(Math.pow(-1, n) / n),
+    // epsilon = 3,
+    epsilon = Math.abs(Math.pow(-1, n) / n),
     epsMin = a - epsilon,
     epsMax = a + epsilon;
+
+let displayNumbers = false;
 
 let animate = false,
     currentDraw = 0,
@@ -85,6 +87,10 @@ function initDescr() {
 		<input id="animation"  type="checkbox" name="animation-turn">
 		<label for="animation">Анимация</label>
 	</div>
+	<div class="form-group">
+		<input id="display-numbers"  type="checkbox" name="numbers-turn">
+		<label for="display-numbers">Подписывать точки</label>
+	</div>
 </form>
 </div>
 
@@ -98,10 +104,6 @@ function initDescr() {
         <input id="epsilon-input" type="text" value="${epsilon}" disabled>
 	</div>
 </form>
-
-<div style="display: flex; margin-top: 50px">
-	<button id="execute-builds" style="margin: auto">Выполнить построения!</button>
-</div>
 	`;
 
     $("#parameters").html(parametershtml);
@@ -109,14 +111,16 @@ function initDescr() {
     applyCssStyles();
     $("Title").html("Пример сходящейся последовательности");
 
-    $("#execute-builds").click(function(e) {
+    $(document.body).click(function(e) {
         displayType = $("form[name=form-display-type] :checked").attr("id");
         n = parseInt($("#n-input").val());
         // epsilon = +$("#epsilon-input").val();
-        points[0].coord1[0] = a - epsilon;          
+        epsilon = Math.abs(Math.pow(-1, n) / n);
+        points[0].coord1[0] = a - epsilon;
         points[1].coord1[0] = a + epsilon;
 
         animate = $("input[name=animation-turn]").is(":checked");
+        displayNumbers = $("input[name=numbers-turn]").is(":checked");
         clearInterval(intervalCanacelId);
         currentDraw = 0;
         intervalCanacelId = -1;
@@ -128,27 +132,43 @@ function initDescr() {
 
 function initData() {
     if (arrPoint != 0.0) {
-        if (points[0].coord1[0] >= a - 0.1) {
+        if (points[0].coord1[0] >= a - 0.01) {
             points[0].coord1[0] = a - 0.1;
         }
 
-        if (points[1].coord1[0] <= a + 0.1) {
+        if (points[1].coord1[0] <= a + 0.01) {
             points[1].coord1[0] = a + 0.1;
         }
 
-        points[0].coord1[1] = 0;
-        points[0].coord1[2] = 0;
+        if (displayType === "numercal-axis") {
+            points[0].coord1[1] = 0;
+            points[0].coord1[2] = 0;
 
-        points[1].coord1[1] = 0;
-        points[1].coord1[2] = 0;
+            points[1].coord1[1] = 0;
+            points[1].coord1[2] = 0;
 
-        primitives.push({
-            class: "point",
-            text: "",
-            arr0: [arrPoint[0], 0.0, 0.0],
-            rad: pointRad,
-            color: [1.0, 0.0, 1.0, 1.0]
-        });
+            primitives.push({
+                class: "point",
+                text: "",
+                arr0: [arrPoint[0], 0.0, 0.0],
+                rad: pointRad,
+                color: [1.0, 0.0, 1.0, 1.0]
+            });
+        } else {
+            points[0].coord1[0] = 0;
+            points[0].coord1[2] = 0;
+
+            points[1].coord1[0] = 0;
+            points[1].coord1[2] = 0;
+
+            primitives.push({
+                class: "point",
+                text: "",
+                arr0: [0.0, arrPoint[1], 0.0],
+                rad: pointRad,
+                color: [1.0, 0.0, 1.0, 1.0]
+            });
+        }
     }
 
     if (epsMin !== points[0].coord1[0]) {
@@ -165,36 +185,51 @@ function initData() {
 
     $("#epsilon-input").val(epsilon.toPrecision(2).toString());
 
-    primitives.push({
-        class: "point",
-        text: katex.renderToString(
-            `\\epsilon_{min}=${points[0].coord1[0].toPrecision(2)}`
-        ),
-        pos: "ct",
-        arr0: vec3.create([points[0].coord1[0], 0.0, 0.0]),
-        rad: pointRad,
-        color: [0.0, 0.0, 1.0, 1.0]
-    });
+    if (displayType == "numercal-axis") {
+        primitives.push({
+            class: "point",
+            text: katex.renderToString(
+                `\\epsilon_{min}=${points[0].coord1[0].toPrecision(2)}`
+            ),
+            pos: "ct",
+            arr0: vec3.create([points[0].coord1[0], 0.0, 0.0]),
+            rad: pointRad,
+            color: [1.0, 0.0, 0.0, 1.0]
+        });
 
-    primitives.push({
-        class: "point",
-        text: katex.renderToString(
-            `\\epsilon_{max}=${points[1].coord1[0].toPrecision(2)}`
-        ),
-        pos: "ct",
-        arr0: [points[1].coord1[0], 0.0, 0.0],
-        rad: pointRad,
-        color: [0.0, 0.0, 1.0, 1.0]
-    });
+        primitives.push({
+            class: "point",
+            text: katex.renderToString(
+                `\\epsilon_{max}=${points[1].coord1[0].toPrecision(2)}`
+            ),
+            pos: "ct",
+            arr0: [points[1].coord1[0], 0.0, 0.0],
+            rad: pointRad,
+            color: [1.0, 0.0, 0.0, 1.0]
+        });
+    } else {
+        primitives.push({
+            class: "point",
+            text: katex.renderToString(
+                `\\epsilon_{min}=${points[0].coord1[0].toPrecision(2)}`
+            ),
+            pos: "ct",
+            arr0: [0.0, points[0].coord1[0], 0.0],
+            rad: pointRad,
+            color: [1.0, 0.0, 0.0, 1.0]
+        });
 
-    primitives.push({
-        class: "point",
-        text: katex.renderToString("0"),
-        pos: "rt",
-        arr0: [points[2].coord1[0], 0.0, 0.0],
-        rad: pointRad,
-        color: [0.0, 0.0, 1.0, 1.0]
-    });
+        primitives.push({
+            class: "point",
+            text: katex.renderToString(
+                `\\epsilon_{max}=${points[1].coord1[0].toPrecision(2)}`
+            ),
+            pos: "ct",
+            arr0: [0.0, points[1].coord1[0], 0.0],
+            rad: pointRad,
+            color: [1.0, 0.0, 0.0, 1.0]
+        });
+    }
 
     if (displayType === "func-form") {
         primitives.push({
@@ -202,7 +237,7 @@ function initData() {
             text: "",
             pos: "lt",
             arr0: vec3.create([0, a, 0.0]),
-            arr1: vec3.create([epsMax, a, 0.0]),
+            arr1: vec3.create([n, a, 0.0]),
             rad: 2,
             color: [1.0, 0.0, 0.0, 1.0]
         });
@@ -243,30 +278,41 @@ function initData() {
 }
 
 function computePoints(data) {
-    for (let i = 1; i <= n; i++) {
-        let x = 2.0 + (-1) ** i / i;
+    let computedN = 0;
+    let x = 2.0 + (-1) ** 1 / 1;
+
+    for (let i = 1; x < epsMin || (x > epsMax && i <= 100); i++, computedN++) {
+        x = 2.0 + (-1) ** i / i;
+        text = katex.renderToString(x.toPrecision(2).toString());
+
+        if (!displayNumbers) {
+            text = "";
+        }
+
         if (displayType === "numercal-axis") {
-            if (x >= epsMin && x <= epsMax) {
-                data.push({
-                    class: "point",
-                    text: katex.renderToString(x.toPrecision(2).toString()),
-                    pos: "rt",
-                    arr0: vec3.create([x, 0.0, 0.0]),
-                    rad: pointRad,
-                    color: pointColor
-                });
-            }
+            data.push({
+                class: "point",
+                text: text,
+                pos: "rt",
+                arr0: vec3.create([x, 0.0, 0.0]),
+                rad: pointRad,
+                color: pointColor
+            });
         } else if (displayType === "func-form") {
-            if (i >= epsMin && i <= epsMax) {
-                data.push({
-                    class: "point",
-                    text: katex.renderToString(x.toPrecision(2).toString()),
-                    pos: "rt",
-                    arr0: vec3.create([i, x, 0.0]),
-                    rad: pointRad,
-                    color: pointColor
-                });
-            }
+            data.push({
+                class: "point",
+                text: text,
+                pos: "rt",
+                arr0: vec3.create([i, x, 0.0]),
+                rad: pointRad,
+                color: pointColor
+            });
         }
     }
+
+    if (n != computedN) {
+        n = computedN;
+    }
+
+    $("#n-input").val(n);
 }
