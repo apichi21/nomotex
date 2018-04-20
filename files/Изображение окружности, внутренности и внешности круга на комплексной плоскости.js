@@ -101,7 +101,7 @@ function initDescr() {
 
 <br><br>
 <div style="display: flex; margin-top: 30px">
-	<button id="execute-builds" style="margin: auto">Выполнить построения!</button>
+	<button id="execute-builds" style="margin: auto">Выполнить построения</button>
 </div>
 	`;
 
