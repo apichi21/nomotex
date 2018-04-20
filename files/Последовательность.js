@@ -1,7 +1,8 @@
 let dimention = "2d";
 
 let sequenceType = "unit-series",
-    displayType = "numercal-axis";
+    displayType = "numercal-axis",
+    drawNumbres = true;
 
 let w = 1.0,
     b = 0.5;
@@ -139,6 +140,10 @@ function initDescr() {
 		<input id="animation"  type="checkbox" name="animation-turn">
 		<label for="animation">Анимация</label>
 	</div>
+	<div class="form-group">
+		<input id="draw-numbers"  type="checkbox" name="numbers-turn" checked>
+		<label for="animation">Подписывать числа</label>
+	</div>
 </form>
 </div>
 
@@ -156,6 +161,7 @@ function initDescr() {
         n = parseInt($("#n-input").val());
 
         animate = $("input[name=animation-turn]").is(":checked");
+        drawNumbres = $("input[name=numbers-turn]").is(":checked");
         clearInterval(intervalCanacelId);
         currentDraw = 0;
         intervalCanacelId = -1;
@@ -169,7 +175,7 @@ function initDescr() {
     $("Title").html('Квант "Последовательность"');
 }
 
-const pointColor = [1.0, 0.647, 0.0, 1.0],
+const pointColor = [0.0, 0.0, 1.0, 1.0],
     pointRad = 5,
     chosenPointRad = 6;
 
@@ -204,7 +210,7 @@ function initData() {
         pos: "ct",
         arr0: vec3.create([points[0].coord1[0], 0.0, 0.0]),
         rad: pointRad,
-        color: [0.0, 0.0, 1.0, 1.0]
+        color: [1.0, 0.0, 0.0, 1.0]
     });
     primitives.push({
         class: "point",
@@ -214,15 +220,7 @@ function initData() {
         pos: "ct",
         arr0: vec3.create([points[1].coord1[0], 0.0, 0.0]),
         rad: pointRad,
-        color: [0.0, 0.0, 1.0, 1.0]
-    });
-    primitives.push({
-        class: "point",
-        text: katex.renderToString("0"),
-        pos: "rt",
-        arr0: vec3.create([points[2].coord1[0], 0.0, 0.0]),
-        rad: pointRad,
-        color: [0.0, 0.0, 1.0, 1.0]
+        color: [1.0, 0.0, 0.0, 1.0]
     });
 
     if (animate === true) {
@@ -269,11 +267,16 @@ function computePoints(data) {
                 x = i;
                 break;
         }
+        let text = katex.renderToString(x.toPrecision(2).toString());
+        if (!drawNumbres) {
+            text = "";
+        }
+
         if (displayType === "numercal-axis") {
             if (x >= xMin && x <= xMax) {
                 data.push({
                     class: "point",
-                    text: katex.renderToString(x.toPrecision(2).toString()),
+                    text: text,
                     pos: "rt",
                     arr0: vec3.create([x, 0.0, 0.0]),
                     rad: pointRad,
@@ -284,7 +287,7 @@ function computePoints(data) {
             if (i >= xMin && i <= xMax) {
                 data.push({
                     class: "point",
-                    text: katex.renderToString(x.toPrecision(2).toString()),
+                    text: text,
                     pos: "rt",
                     arr0: vec3.create([i, x, 0.0]),
                     rad: pointRad,

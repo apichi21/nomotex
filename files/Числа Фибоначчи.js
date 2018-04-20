@@ -131,11 +131,13 @@ let colors = [
     [0.69, 0.655, 0.847, 1.0]
 ];
 
-const pointRad = 5;
-isShowAxes = false;
+const POINT_RAD = 5;
+IS_SHOW_AXES = false;
 
-const arcColor = [1.0, 0.0, 0.0, 1.0],
-    lineHeight = 3.0;
+const ARC_COLOR = [1.0, 0.0, 0.0, 1.0],
+    LINE_HEIGHT = 3.0;
+
+const MAX_NUMBERS_DISPLAYS = 100;
 
 function initData() {
     if (animate === true) {
@@ -211,12 +213,14 @@ function computeSpiralPlane(data) {
     let colorsJ = -1;
     for (let i = 0; i < maxI; i++) {
         if (-X / 2 <= x && x <= X / 2 && -Y / 2 <= y && y <= Y / 2) {
-            data.push({
-                class: "text",
-                text: `${i}`,
-                arr0: [x - 0.5, y - 0.5, 0.0],
-                pos: "cc"
-            });
+            if (maxI <= MAX_NUMBERS_DISPLAYS) {
+                data.push({
+                    class: "text",
+                    text: `${i}`,
+                    arr0: [x - 0.5, y - 0.5, 0.0],
+                    pos: "cc"
+                });
+            }
 
             if (numbers[i] === true) {
                 data.push({
@@ -278,8 +282,8 @@ function computeSpiralArc(data) {
             arr1: [-1.0, 0.0, 0.0],
             arr2: [0.0, -1.0, 0.0],
             Rad: 1.0,
-            rad: lineHeight,
-            color: arcColor
+            rad: LINE_HEIGHT,
+            color: ARC_COLOR
         });
     }
 
@@ -300,8 +304,8 @@ function computeSpiralArc(data) {
             arr1: [0.0, -1.0, 0.0],
             arr2: [1.0, 0.0, 0.0],
             Rad: 1.0,
-            rad: lineHeight,
-            color: arcColor
+            rad: LINE_HEIGHT,
+            color: ARC_COLOR
         });
     }
 
@@ -326,8 +330,8 @@ function computeSpiralArc(data) {
             arr1: [x, y, 0.0],
             arr2: [x - numbers[i], y + numbers[i], 0.0],
             Rad: numbers[i],
-            rad: lineHeight,
-            color: arcColor
+            rad: LINE_HEIGHT,
+            color: ARC_COLOR
         });
 
         x = x - numbers[i];
@@ -349,8 +353,8 @@ function computeSpiralArc(data) {
             arr1: [x, y, 0.0],
             arr2: [x - numbers[i + 1], y - numbers[i + 1], 0.0],
             Rad: numbers[i + 1],
-            rad: lineHeight,
-            color: arcColor
+            rad: LINE_HEIGHT,
+            color: ARC_COLOR
         });
 
         x = x - numbers[i + 1];
@@ -371,8 +375,8 @@ function computeSpiralArc(data) {
             arr1: [x, y, 0.0],
             arr2: [x + numbers[i + 2], y - numbers[i + 2], 0.0],
             Rad: numbers[i + 2],
-            rad: lineHeight,
-            color: arcColor
+            rad: LINE_HEIGHT,
+            color: ARC_COLOR
         });
 
         x = x + numbers[i + 2];
@@ -394,8 +398,8 @@ function computeSpiralArc(data) {
             arr1: [x, y, 0.0],
             arr2: [x + numbers[i + 3], y + numbers[i + 3], 0.0],
             Rad: numbers[i + 3],
-            rad: lineHeight,
-            color: arcColor
+            rad: LINE_HEIGHT,
+            color: ARC_COLOR
         });
 
         x = x + numbers[i + 3];
