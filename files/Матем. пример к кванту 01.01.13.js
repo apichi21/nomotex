@@ -18,21 +18,12 @@ let k = Math.atan((y2 - y1) / (x2 - x1));
 
 // rotate and translate figure
 function move(a) {
-    var p = [],
-        r = [],
+    var r = [],
         out = vec3.create();
 
-    a[0] = a[0] + center[0];
-    a[1] = a[1] + center[1];
-    a[2] = a[2] + center[2];
-
-    p[0] = a[0] - center[0];
-    p[1] = a[1] - center[1];
-    p[2] = a[2] - center[2];
-
-    r[0] = p[0] * Math.cos(k) - p[1] * Math.sin(k);
-    r[1] = p[0] * Math.sin(k) + p[1] * Math.cos(k);
-    r[2] = p[2];
+    r[0] = a[0] * Math.cos(k) - a[1] * Math.sin(k);
+    r[1] = a[0] * Math.sin(k) + a[1] * Math.cos(k);
+    r[2] = a[2];
 
     out[0] = r[0] + center[0];
     out[1] = r[1] + center[1];
@@ -58,21 +49,13 @@ function unmove(a) {
 
 function initPoints() {
     points = [];
-    points.push({ coord1: vec3.create([0.0, 0.0, 0.0]), movable: "fixed" });
-    points.push({ coord1: vec3.create([x1, y1, 0.0]), movable: "fixed" });
-    points.push({ coord1: vec3.create([x2, y2, 0.0]), movable: "fixed" });
-    points.push({ coord1: center, movable: "fixed" });
-    points.push({ coord1: vec3.create(), movable: "free" }); // z
-    points.push({
-        coord1: move([a, 0.0, 0.0]),
-        movable: "line",
-        vector: [a, k * a, 0.0]
-    }); // A
-    points.push({
-        coord1: move([0.0, b, 0.0]),
-        movable: "line",
-        vector: [b, -1 / k * b, 0.0]
-    }); // B
+    points.push({coord1: vec3.create([0.0, 0.0, 0.0]), movable: "fixed"});
+    points.push({coord1: vec3.create([x1, y1, 0.0]), movable: "fixed"});
+    points.push({coord1: vec3.create([x2, y2, 0.0]), movable: "fixed"});
+    points.push({coord1: center, movable: "fixed"});
+    points.push({coord1: vec3.create(), movable: "free"}); // z
+    points.push({coord1: move([a, 0.0, 0.0]), movable: "line", vector: [x2 - x1, y2 - y1, 0.0]}); // A
+    points.push({coord1: move([0.0, b, 0.0]), movable: "line", vector: [(y1 - y2) / (x2 - x1), 1, 0.0]}); // B
 }
 
 function applyCssStyles() {
@@ -95,10 +78,10 @@ function applyCssStyles() {
         margin: "0 10px"
     });
 
-    $("form[name=figure]").each(function(idx, form) {
+    $("form[name=figure]").each(function (idx, form) {
         $(form)
             .find(".form-group")
-            .each(function(idx, elem) {
+            .each(function (idx, elem) {
                 elem.style.display = "flex";
                 elem.style.justifyContent = "space-between";
                 elem.style.alignItems = "center";
@@ -106,7 +89,8 @@ function applyCssStyles() {
     });
 }
 
-function getParams() {}
+function getParams() {
+}
 
 function initDescr() {
     $("#description").html(
@@ -162,7 +146,7 @@ function initDescr() {
 	`;
 
     $("#parameters").html(parametershtml);
-    $(document.body).click(function(e) {
+    $(document.body).click(function (e) {
         figureType = $("form[name=figure] :checked").attr("id");
         x1 = +$("#x1-input").val();
         y1 = +$("#y1-input").val();
@@ -170,19 +154,17 @@ function initDescr() {
         y2 = +$("#y2-input").val();
         a = +$("#a-input").val();
         c = Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) / 2;
-        b = Math.sqrt(c * c - a * a);
+        if (b > 0) b = Math.sqrt(c * c - a * a); else b = -Math.sqrt(c * c - a * a);
+        k = Math.atan((y2 - y1) / (x2 - x1));
         if (a >= c) {
             a = c - 0.01;
             $("#a-input").val(a.toPrecision(2).toString());
         }
-        center = points[3].coord1 = vec3.create([
-            (x1 + x2) / 2,
-            (y1 + y2) / 2,
-            0.0
-        ]);
-        k = Math.atan((y2 - y1) / (x2 - x1));
+        center = points[3].coord1 = vec3.create([(x1 + x2) / 2, (y1 + y2) / 2, 0.0]);
         points[5].coord1 = move([a, 0.0, 0.0]);
+        points[5].vector = vec3.create([x2 - x1, y2 - y1, 0.0]);
         points[6].coord1 = move([0.0, b, 0.0]);
+        points[6].vector = vec3.create([(y1 - y2) / (x2 - x1), 1, 0.0]);
         initBuffers();
     });
 
@@ -196,10 +178,7 @@ function initDescr() {
 let psiz = Math.PI / 4;
 
 function initData() {
-    const pointRad = 4,
-        dashRad = 1.2,
-        lineRad = 2,
-        chosenPointRad = 5;
+    const pointRad = 4, dashRad = 1.2, lineRad = 2, chosenPointRad = 5;
     const pointColor = [1.0, 0.0, 0.0, 1.0];
     const figureColor = [0.0, 0.0, 1.0, 1.0];
     const dashColor = [0.7, 0.7, 0.0, 1.0];
@@ -211,42 +190,37 @@ function initData() {
 
     points[1].coord1 = vec3.create([x1, y1, 0]);
     points[2].coord1 = vec3.create([x2, y2, 0]);
-    points[5].vector = [a, a * k, 0.0];
-
-    b = Math.sqrt(c * c - a * a);
 
     if (arrPoint != 0) {
-        primitives.push({
-            class: "point",
-            text: "",
-            arr0: arrPoint,
-            rad: chosenPointRad,
-            color: [1.0, 0.0, 1.0, 1.0]
-        });
+        primitives.push({class: "point", text: "", arr0: arrPoint, rad: chosenPointRad, color: [1.0, 0.0, 1.0, 1.0]});
         if (arrPoint == points[4].coord1) {
             let pointz = unmove(points[4].coord1);
             pointz[0] = pointz[0] / a;
             pointz[1] = pointz[1] / b;
             psiz = Math.asinh(pointz[1]);
-        }
+        } // z
         if (arrPoint == points[5].coord1) {
+            if (points[5].coord1[0] > x2) vec3.set([x2, y2, 0.0], points[5].coord1);
+            if (points[5].coord1[0] < x1) vec3.set([x1, y1, 0.0], points[5].coord1); // запрет на движение точки A
             a = unmove(points[5].coord1)[0];
-            b = Math.sqrt(c * c - a * a);
+            if (b > 0) b = Math.sqrt(c * c - a * a); else b = -Math.sqrt(c * c - a * a);
             $("#a-input").val(a.toPrecision(2).toString());
             points[6].coord1 = move([0.0, b, 0.0]);
-        }
+        } // A
         if (arrPoint == points[6].coord1) {
             b = unmove(points[6].coord1)[1];
-            a = Math.sqrt(c * c - b * b);
+            if (a > 0) a = Math.sqrt(c * c - b * b); else a = -Math.sqrt(c * c - b * b);
+            if (isNaN(a)) {
+                a = 0;
+                if (b < 0) b = -c; else b = c;
+                vec3.set(move([0.0, b, 0.0]), points[6].coord1);
+            } // запрет на движение точки B
             $("#a-input").val(a.toPrecision(2).toString());
             points[5].coord1 = move([a, 0.0, 0.0]);
-        }
+        } // B
     }
 
-    vec3.set(
-        move([a * Math.cosh(psiz), b * Math.sinh(psiz), 0.0]),
-        points[4].coord1
-    );
+    vec3.set(move([a * Math.cosh(psiz), b * Math.sinh(psiz), 0.0]), points[4].coord1);
     primitives.push({
         class: "point",
         text: katex.renderToString("z_1"),
@@ -274,8 +248,8 @@ function initData() {
     // Line perpendicular focus line
     primitives.push({
         class: "line",
-        arr0: move([(x1 + x2) / 2, b, 0.0]),
-        arr1: move([(x1 + x2) / 2, -b, 0.0]),
+        arr0: move([0, b, 0.0]),
+        arr1: move([0, -b, 0.0]),
         rad: lineRad,
         color: arrowColor
     });
