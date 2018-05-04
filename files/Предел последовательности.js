@@ -22,9 +22,9 @@ const pointRad = 5,
 
 function initPoints() {
     points = [];
-    points.push({ coord1: vec3.create([epsMin, 0.0, 0.0]), movable: "free" });
-    points.push({ coord1: vec3.create([epsMax, 0.0, 0.0]), movable: "free" });
-    points.push({ coord1: vec3.create([0.0, 0.0, 0.0]), movable: "fixed" });
+    points.push({coord1: vec3.create([epsMin, 0.0, 0.0]), movable: "free"});
+    points.push({coord1: vec3.create([epsMax, 0.0, 0.0]), movable: "free"});
+    points.push({coord1: vec3.create([0.0, 0.0, 0.0]), movable: "fixed"});
 }
 
 function applyCssStyles() {
@@ -40,10 +40,10 @@ function applyCssStyles() {
         margin: "20px"
     });
 
-    $("form[name=form-display-type]").each(function(idx, form) {
+    $("form[name=form-display-type]").each(function (idx, form) {
         $(form)
             .find(".form-group")
-            .each(function(idx, elem) {
+            .each(function (idx, elem) {
                 elem.style.display = "flex";
                 elem.style.justifyContent = "space-between";
                 elem.style.alignItems = "center";
@@ -51,10 +51,10 @@ function applyCssStyles() {
             });
     });
 
-    $("form[name=bound]").each(function(idx, form) {
+    $("form[name=bound]").each(function (idx, form) {
         $(form)
             .find(".form-group")
-            .each(function(idx, elem) {
+            .each(function (idx, elem) {
                 elem.style.display = "flex";
                 elem.style.justifyContent = "space-between";
                 elem.style.alignItems = "center";
@@ -69,8 +69,22 @@ function initDescr() {
     );
 
     let parametershtml = `<div style="font-size: 16px">
-<div style="text-align: center">
-	Докажем, что... $a_n = 2 + \\frac{(-1)^n}{n}$
+<div style="text-align: left">
+	Докажем, что последовательность $$a_n = 2 + \\frac{(-1)^n}{n}$$ имеет предел $a=2.$<br>
+	Доказательство:<br>
+	Выберем произвольное число $\\varepsilon > 0$. Требуется доказать, что существует такое $N(\\varepsilon)$, 
+	что при $n>N$ выполняется неравенство
+	$$|a_n-a|<\\varepsilon$$
+	Составим это число:
+	$$|a_n-a| = |2 + \\frac{1^n}{n} - 2| = |\\frac{(-1)^n}{n}| = \\frac{|(-1)^n|}{n} = \\frac{1}{n}$$
+	Пусть $0 < \\varepsilon < 1$.
+	Тогда если взять в качестве $N(\\varepsilon) = E(\\frac{1}{\\varepsilon})+1$, где $E(x)$ - целая часть числа $x$, 
+	то при $n>N(\\epsilon)$ выполняется неравенство
+	$$|a_n - a| = \\frac{1}{n} < \\frac{1}{N(\\varepsilon)} = \\frac{1}{E(\\frac{1}{\\varepsilon})+1} 
+	\\leq \\frac{1}{\\frac{1}{\\varepsilon}} = \\varepsilon$$,
+	т.к. $E(\\frac{1}{\\varepsilon})+1 \\geq \\frac{1}{\\varepsilon}$. Если же $\\varepsilon \\geq 1$, то в качестве 
+	$N$ можно выбрать $N=1$, тогда при $n>N=1$ получим
+	$$(a_n - a) < \\frac{1}{n} < \\frac{1}{N} = 1 \\leq \\varepsilon.$$ 
 </div>
 <br><br>
 <div class="header">Выберите тип отображения:</div> 
@@ -111,7 +125,7 @@ function initDescr() {
     applyCssStyles();
     $("Title").html("Пример сходящейся последовательности");
 
-    $(document.body).click(function(e) {
+    $(document.body).click(function (e) {
         displayType = $("form[name=form-display-type] :checked").attr("id");
         n = parseInt($("#n-input").val());
         // epsilon = +$("#epsilon-input").val();
@@ -256,7 +270,7 @@ function initData() {
         }
 
         if (intervalCanacelId === -1) {
-            intervalCanacelId = setInterval(function() {
+            intervalCanacelId = setInterval(function () {
                 initBuffers();
             }, 500);
         }
