@@ -81,10 +81,10 @@ function initDescr() {
 	Тогда если взять в качестве $N(\\varepsilon) = E(\\frac{1}{\\varepsilon})+1$, где $E(x)$ - целая часть числа $x$, 
 	то при $n>N(\\epsilon)$ выполняется неравенство
 	$$|a_n - a| = \\frac{1}{n} < \\frac{1}{N(\\varepsilon)} = \\frac{1}{E(\\frac{1}{\\varepsilon})+1} 
-	\\leq \\frac{1}{\\frac{1}{\\varepsilon}} = \\varepsilon$$,
+	\\leq \\frac{1}{\\frac{1}{\\varepsilon}} = \\varepsilon,$$
 	т.к. $E(\\frac{1}{\\varepsilon})+1 \\geq \\frac{1}{\\varepsilon}$. Если же $\\varepsilon \\geq 1$, то в качестве 
 	$N$ можно выбрать $N=1$, тогда при $n>N=1$ получим
-	$$(a_n - a) < \\frac{1}{n} < \\frac{1}{N} = 1 \\leq \\varepsilon.$$ 
+	$$|a_n - a| < \\frac{1}{n} < \\frac{1}{N} = 1 \\leq \\varepsilon.$$ 
 </div>
 <br><br>
 <div class="header">Выберите тип отображения:</div> 

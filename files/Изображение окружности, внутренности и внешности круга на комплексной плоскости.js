@@ -12,10 +12,10 @@ let rangeOfFilling = 100;
 
 function initPoints() {
     points = [];
-    points.push({ coord1: vec3.create([x0, 0.0, 0.0]), movable: "fixed" });
-    points.push({ coord1: vec3.create([0.0, y0, 0.0]), movable: "fixed" });
-    points.push({ coord1: vec3.create([0.0, 0.0, 0.0]), movable: "fixed" });
-    points.push({ coord1: vec3.create([x0, y0, 0.0]), movable: "free" });
+    points.push({coord1: vec3.create([x0, 0.0, 0.0]), movable: "fixed"});
+    points.push({coord1: vec3.create([0.0, y0, 0.0]), movable: "fixed"});
+    points.push({coord1: vec3.create([0.0, 0.0, 0.0]), movable: "fixed"});
+    points.push({coord1: vec3.create([x0, y0, 0.0]), movable: "free"});
     points.push({
         coord1: vec3.create([x0, y0 + R, 0.0]),
         movable: "line",
@@ -43,10 +43,10 @@ function applyCssStyles() {
         margin: "0 10px"
     });
 
-    $("form[name=figure]").each(function(idx, form) {
+    $("form[name=figure]").each(function (idx, form) {
         $(form)
             .find(".form-group")
-            .each(function(idx, elem) {
+            .each(function (idx, elem) {
                 elem.style.display = "flex";
                 elem.style.justifyContent = "space-between";
                 elem.style.alignItems = "center";
@@ -109,7 +109,7 @@ function initDescr() {
 `;
 
     $("#parameters").html(parametershtml);
-    $(document.body).click(function(e) {
+    $(document.body).click(function (e) {
         figureType = $("form[name=figure] :checked").attr("id");
         x0 = points[3].coord1[0] = +$("#x0-input").val();
         y0 = points[3].coord1[1] = +$("#y0-input").val();
@@ -306,19 +306,19 @@ function initData() {
             let beginxBig =
                 x0 +
                 (rangeOfFilling * R + rangeOfFilling) *
-                    Math.cos(Math.PI * i / numberOfTriangles);
+                Math.cos(Math.PI * i / numberOfTriangles);
             let beginyBig =
                 y0 +
                 (rangeOfFilling * R + rangeOfFilling) *
-                    Math.sin(Math.PI * i / numberOfTriangles);
+                Math.sin(Math.PI * i / numberOfTriangles);
             let endxBig =
                 x0 +
                 (rangeOfFilling * R + rangeOfFilling) *
-                    Math.cos(Math.PI * (i + 1) / numberOfTriangles);
+                Math.cos(Math.PI * (i + 1) / numberOfTriangles);
             let endyBig =
                 y0 +
                 (rangeOfFilling * R + rangeOfFilling) *
-                    Math.sin(Math.PI * (i + 1) / numberOfTriangles);
+                Math.sin(Math.PI * (i + 1) / numberOfTriangles);
             primitives.push({
                 class: "plane",
                 text: "",
