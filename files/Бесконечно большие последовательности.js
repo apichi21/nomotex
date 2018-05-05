@@ -77,57 +77,41 @@ function initDescr() {
     );
 
     let parametershtml = `<div style="font-size: 16px">
-<div class="header">Докажите, что последовательности</div>
+<div class="header">Выберите последовательность:</div>
 <form name="sequence">
 	<div class="form-group">
 		<input id="1" type="radio" name="seq" checked>
-		<label for="1">$ a_n = \\frac{sin(n)}{n^2} $</label>
+		<label for="1">$ a_n = (-1)^n \\cdot 2^n $</label>
 	</div>
 	<div class="form-group">
 		<input id="2" type="radio" name="seq" >
-		<label for="2">$ a_n = \\frac{1}{n} $</label>
+		<label for="2">$ a_n = n $</label>
 	</div>
 	<div class="form-group">
 		<input id="3"  type="radio" name="seq">
-		<label for="3">$ a_n = \\frac{1}{n^2} $</label>
+		<label for="3">$ a_n = -\\ln(n) $</label>
 	</div>
 	<div class="form-group">
 		<input id="4"  type="radio" name="seq">
-		<label for="4">$ a_n = \\frac{1}{\\sqrt{n}} $</label>
-	</div>
-	<div class="form-group">
-		<input id="5"  type="radio" name="seq">
-		<label for="5">$ a_n = \\frac{1}{ln(n)} $</label>
+		<label for="4">$ a_n = (1+(-1)^n) \\cdot 2^n $</label>
 	</div>
 </form>
-<div class="header"> - бесконечно малые.</div>
 </div>
 <br><br>
 
 <div class="sequence" id="seq1">
-	Покажем, что последовательность $$a_n = \\frac{sin(n)}{n^2}$$ - бесконечно малая.<br> 
-	Действительно, т.к. 
-	$ |sin(n)| \\leq 1 $, то
-	$$ \\left | \\frac{sin(n)}{n^2} \\right | = \\frac{|sin(n)|}{n^2} < \\frac{1}{n^2}. $$
-	Пусть $ 0 < \\varepsilon < 1 $, тогда, выбирая $ N(\\varepsilon) = \\sqrt{E(1/\\varepsilon) + 1} $,
-	получаем при $ n > N(\\varepsilon) $: 
-	$$ a_n < \\frac{1}{n^2} < \\frac{1}{N(\\varepsilon)^2} = \\frac{1}{E(1/\\varepsilon)+1} \\leq \\frac{1}{(1/\\varepsilon)} = \\varepsilon, $$
-	т.к. $ E(1/\\varepsilon)+1 \\geq \\left (1/\\varepsilon \\right ) $.<br>
-	Если $ \\varepsilon > 1 $, то, выбирая $ N(\\varepsilon) = 1 $, получаем:
-	$$ a_n < \\frac{1}{n^2} < \\frac{1}{N(\\varepsilon)^2}=1 \\leq \\varepsilon.$$
-	Таким образом, последовательность $ a_n $ - действительно бесконечно малая.
+	Последовательность $$a_n = (-1)^n \\cdot 2^n$$ - бесконечно большая, т.к. неравенство $$|(-1)^n \\cdot 2^n| > M$$
+	выполняется при $n>N(\\varepsilon)=E(\\log_2 M).$
 </div>
 <div class="sequence" id="seq2" hidden>
-	$ a_n = \\frac{1}{n} $, $n\\in N $
+	Последовательность $$ a_n = n $$ - положительная бесконечно большая.
 </div>
 <div class="sequence" id="seq3" hidden>
-	$a_n = \\frac{1}{n^2} $, $n \\in N$
+	Последовательность $$ a_n = -\\ln(n) $$ - отрицательная бесконечно большая.
 </div>
 <div class="sequence" id="seq4" hidden>
-	$a_n = \\frac{1}{\\sqrt{n}} $, $n \\in N$
-</div>
-<div class="sequence" id="seq5" hidden>
-	$a_n = \\frac{1}{ln(n)}$, $n \\in N$
+	Последовательность $$ a_n = (1+(-1)^n) \\cdot 2^n $$ не является бесконечно большой, поскольку ее члены с нечетными 
+	номерами равны нулю, что не позволяет добиться выполнения неравенства $|a_n|>M.$
 </div>
 
 <div class="flex-align-items">
@@ -260,22 +244,19 @@ function computePoints(data) {
         let x = 0.0;
         switch (sequenceType) {
             case "1":
-                x = Math.sin(i) / i ** 2;
+                x = (-1) ** i * 2 ** i;
                 break;
             case "2":
-                x = 1 / i;
+                x = i;
                 break;
             case "3":
-                x = 1 / i ** 2;
+                x = -Math.log(i);
                 break;
             case "4":
-                x = 1 / Math.sqrt(i);
-                break;
-            case "5":
-                x = 1 / Math.log(i);
+                x = (1 + (-1) ** i) * 2 ** i;
                 break;
         }
-        let text = katex.renderToString(x.toPrecision(2).toString());
+        let text = katex.renderToString(x.toFixed(1));
         if (!drawNumbers) {
             text = "";
         }

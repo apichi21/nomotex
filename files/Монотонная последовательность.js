@@ -40,6 +40,7 @@ function applyCssStyles() {
     $(".sequence").css({
         border: "1px solid black",
         "border-radius": "10px",
+        "text-align": "center",
         padding: "15px",
         margin: "0 10px"
     });
@@ -75,7 +76,7 @@ function applyCssStyles() {
 
 function initDescr() {
     $("#description").html(
-        '<div class="header">Примеры монотонных последовательностей</div>'
+        '<div class="header">Примеры монотонных и немонотонных последовательностей</div>'
     );
 
     let parametershtml = `<div style="font-size: 16px">
@@ -86,40 +87,38 @@ function initDescr() {
         <label for="unit-series">Натуральный ряд</label>
     </div>
     <div class="sequence" data-sequence-type="unit-series">
-	        $a_n=n$, $n\\in N$
+	        $$a_n=n, n\\in N$$ монотонно возрастает, т.к. $n+1>n.$
     </div>
 	<div class="form-group">
 		<input id="exp"  type="radio" name="sequence-type">
 		<label for="exp">Экспотенциальная последовательность</label>
     </div>
     <div class="sequence" data-sequence-type="exp">
-        $a_n = \\exp(-b n)$, $n \\in N, b \\in \\mathbb{R}$
-        <label for="b-input" >$b$</label>
-        <input type="text" id="b-input" value="0.5">
-    </div>
-    <div class="form-group">
-        <div class="header">Пример немонотонной последовательности</div>
+        $$a_n = e^{-b n}, n \\in N, b \\in \\mathbb{R}$$ монотонно убывает, т.к. $e^{-b(n+1)}< e^{-bn}.$
+        <div class="flex-align-items">
+            <label for="b-input" >$b:$</label>
+            <input type="text" id="b-input" value="0.5">
+        </div>
     </div>
     <div class="form-group">
 		<input id="sin"  type="radio" name="sequence-type">
 		<label for="sin">Синусоидальная последовательность</label>
     </div>
     <div class="sequence" data-sequence-type="sin">
-	    $a_n = \\sin(\\omega n)$, $n \\in N, \\omega \\in \\mathbb{R}$
+	    $$a_n = \\sin(\\omega n), n \\in N, \\omega \\in \\mathbb{R}$$ немонотонная.
 	    <div class="flex-align-items">
-		    <label for="omega-input">$\\omega$</label>
+		    <label for="omega-input">$\\omega:$</label>
 		    <input type="text" id="omega-input" value="1.0">
 	    </div>
     </div>
 </form>
 
 <div class="flex-align-items">
-	<label for="n-input" >$n$</label>
+	<label for="n-input" >$n:$</label>
 	<input type="number" id="n-input" value="10">
 </div>
 
-<br><br>
-<div class="sequence">
+<br>
 <div class="header">Выберите тип отображения:</div> 
 <form name="form-display-type">
 	<div class="form-group">
@@ -135,7 +134,6 @@ function initDescr() {
 		<label for="animation">Анимация</label>
 	</div>
 </form>
-</div>
 
 <div style="display: flex; margin-top: 50px">
 	<button id="execute-builds" style="margin: auto">Выполнить построения!</button>
