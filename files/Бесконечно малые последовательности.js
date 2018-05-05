@@ -1,5 +1,6 @@
 //Размерность пространства в примере (2d или 3d)
 let dimention = "2d";
+let xLabel = "x", yLabel = "";
 
 let sequenceType = "1",
     displayType = "numercal-axis";
@@ -38,7 +39,7 @@ function applyCssStyles() {
         "border-radius": "10px",
         padding: "15px",
         margin: "0 5px",
-        "text-align": "center"
+        "text-align": "left"
     });
 
     $("form[name=form-display-type]").each(function(idx, form) {
@@ -103,16 +104,16 @@ function initDescr() {
 <br><br>
 
 <div class="sequence" id="seq1">
-	Покажем, что последовательность $ a_n = \\frac{sin(n)}{n^2} $ бесконечно малая.<br> 
+	Покажем, что последовательность $$a_n = \\frac{sin(n)}{n^2}$$ - бесконечно малая.<br> 
 	Действительно, т.к. 
-	$ |sin(n)| \\leq 1 $, то <br>
-	$ \\left | \\frac{sin(n)}{n^2} \\right | = \\frac{|sin(n)|}{n^2} < \\frac{1}{n^2} $.<br>
+	$ |sin(n)| \\leq 1 $, то
+	$$ \\left | \\frac{sin(n)}{n^2} \\right | = \\frac{|sin(n)|}{n^2} < \\frac{1}{n^2}. $$
 	Пусть $ 0 < \\varepsilon < 1 $, тогда, выбирая $ N(\\varepsilon) = \\sqrt{E(1/\\varepsilon) + 1} $,
-	получаем при $ n > N(\\varepsilon) $:<br> 
-	$ a_n < \\frac{1}{n^2} < \\frac{1}{N(\\varepsilon)^2} = \\frac{1}{E(1/\\varepsilon)+1} \\leq \\frac{1}{(1/\\varepsilon)} = \\varepsilon, $
+	получаем при $ n > N(\\varepsilon) $: 
+	$$ a_n < \\frac{1}{n^2} < \\frac{1}{N(\\varepsilon)^2} = \\frac{1}{E(1/\\varepsilon)+1} \\leq \\frac{1}{(1/\\varepsilon)} = \\varepsilon, $$
 	т.к. $ E(1/\\varepsilon)+1 \\geq \\left (1/\\varepsilon \\right ) $.<br>
-	Если $ \\varepsilon > 1 $, то, выбирая $ N(\\varepsilon) = 1 $, получаем:<br>
-	$ a_n < \\frac{1}{n^2} < \\frac{1}{N(\\varepsilon)^2}=1 \\leq \\varepsilon $.<br>
+	Если $ \\varepsilon > 1 $, то, выбирая $ N(\\varepsilon) = 1 $, получаем:
+	$$ a_n < \\frac{1}{n^2} < \\frac{1}{N(\\varepsilon)^2}=1 \\leq \\varepsilon.$$
 	Таким образом, последовательность $ a_n $ - действительно бесконечно малая.
 </div>
 <div class="sequence" id="seq2" hidden>
@@ -129,7 +130,7 @@ function initDescr() {
 </div>
 
 <div class="flex-align-items">
-	<label for="n-input" >$n: $</label>
+	<label for="n-input" >$n:$</label>
 	<input type="number" id="n-input" value="10">
 </div>
 
@@ -270,6 +271,8 @@ function computePoints(data) {
                 break;
         }
         if (displayType === "numercal-axis") {
+            xLabel = "x";
+            yLabel = "";
             if (x >= xMin && x <= xMax) {
                 data.push({
                     class: "point",
@@ -281,6 +284,8 @@ function computePoints(data) {
                 });
             }
         } else if (displayType === "func-form") {
+            xLabel = "n";
+            yLabel = "a_n";
             if (i >= xMin && i <= xMax) {
                 data.push({
                     class: "point",

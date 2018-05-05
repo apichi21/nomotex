@@ -1,4 +1,5 @@
 let dimention = "2d";
+let xLabel = "x", yLabel = "";
 
 let sequenceType = "unit-series",
     displayType = "numercal-axis";
@@ -261,6 +262,7 @@ function computePoints(data) {
                 break;
         }
         if (displayType === "numercal-axis") {
+            xLabel = "x", yLabel = "";
             if (x >= xMin && x <= xMax) {
                 data.push({
                     class: "point",
@@ -272,6 +274,7 @@ function computePoints(data) {
                 });
             }
         } else if (displayType === "func-form") {
+            xLabel = "n", yLabel = "a_n";
             if (i >= xMin && i <= xMax) {
                 data.push({
                     class: "point",

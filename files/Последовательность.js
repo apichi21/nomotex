@@ -1,4 +1,5 @@
 let dimention = "2d";
+let xLabel = "x", yLabel = "";
 
 let sequenceType = "unit-series",
     displayType = "numercal-axis",
@@ -115,6 +116,7 @@ function initDescr() {
         <div class="flex-align-items">
         <label for="b-input" >$b$</label>
         <input type="text" id="b-input" value="0.5">
+        </div>
     </div>
 </form>
 
@@ -123,7 +125,7 @@ function initDescr() {
 	<input type="number" id="n-input" value="10">
 </div>
 
-<br><br>
+<br>
 <div class="header">Выберите тип отображения:</div> 
 <form name="form-display-type">
 	<div class="form-group">
@@ -267,6 +269,8 @@ function computePoints(data) {
         }
 
         if (displayType === "numercal-axis") {
+            xLabel = "x";
+            yLabel = "";
             if (x >= xMin && x <= xMax) {
                 data.push({
                     class: "point",
@@ -278,6 +282,8 @@ function computePoints(data) {
                 });
             }
         } else if (displayType === "func-form") {
+            xLabel = "n";
+            yLabel = "a_n";
             if (i >= xMin && i <= xMax) {
                 data.push({
                     class: "point",

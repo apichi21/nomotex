@@ -688,10 +688,10 @@ function initAxes() {
 
         if (isShowAxes) {
             vec3.set([objWH[0],0,0], textLabels[0].objCoords);
-            textLabels[0].text.html("x");
+            textLabels[0].text.html(typeof xLabel==="undefined"?katex.renderToString("x"):katex.renderToString(xLabel));
             textLabels[0].align = "rb";
             vec3.set([0,objX0Y0[1],0], textLabels[1].objCoords);
-            textLabels[1].text.html("y");
+            textLabels[1].text.html(typeof yLabel==="undefined"?katex.renderToString("y"):katex.renderToString(yLabel));
             textLabels[1].align = "lt";
         }
         if (isAxisNumbers) {

@@ -1,4 +1,5 @@
 let dimention = "2d";
+let xLabel = "", yLabel = "";
 
 let n = 7;
 let displayType = "fib-spiral",
@@ -66,7 +67,7 @@ function applyCssStyles() {
 
 function initDescr() {
     $("#description").html(
-        '<div class="header">Последовательности чисел Фибоначчи</div>'
+        '<div class="header">Последовательность чисел Фибоначчи</div>'
     );
 
     let parametershtml = `<div style="font-size: 16px">
@@ -95,7 +96,7 @@ function initDescr() {
 
 <form name="bound">
 	<div class="form-group">
-		<label for="n-input" >$n$</label>
+		<label for="n-input" >$n:$</label>
 		<input type="number" id="n-input" value="${n}">
 	</div>	
 </form>
@@ -104,7 +105,7 @@ function initDescr() {
     $("#parameters").html(parametershtml);
 
     applyCssStyles();
-    $("Title").html('Квант "Последовательность"');
+    $("Title").html('Последовательность чисел Фибоначчи');
 
     $(document.body).click(function(e) {
         displayType = $("input[name=display-type]:checked").attr("id");

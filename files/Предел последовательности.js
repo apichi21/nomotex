@@ -1,5 +1,6 @@
 //Размерность пространства в примере (2d или 3d)
 let dimention = "2d";
+let xLabel = "x", yLabel = "";
 
 let displayType = "numercal-axis";
 
@@ -304,6 +305,7 @@ function computePoints(data) {
         }
 
         if (displayType === "numercal-axis") {
+            xLabel = "x", yLabel = "";
             data.push({
                 class: "point",
                 text: text,
@@ -313,6 +315,7 @@ function computePoints(data) {
                 color: pointColor
             });
         } else if (displayType === "func-form") {
+            xLabel = "n", yLabel = "a_n";
             data.push({
                 class: "point",
                 text: text,
