@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <title>Примеры для квантов</title>
+    <meta charset="utf-8">
+
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},TeX: { equationNumbers: { autoNumber: "AMS" } }});
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML'></script>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: "Trebuchet MS", Tahoma, Arial, Helvetica, sans-serif;
+        }
+
+        .canvasContainer {
+            width: 100vw;
+            border-spacing: 0px;
+        }
+
+        .canvasContainer td {
+            padding: 0px;
+            height: 100%;
+            vertical-align: top
+        }
+
+        #containerGreen {
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        #containerYellow {
+            width: 520px;
+            background-color: #e7f1f3;
+            padding-top: 15px;
+            padding-left: 5px;
+            padding-right: 5px;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        #Vectors3D-canvas {
+            width: 100%;
+            height: 100vh;
+            display: block;
+            border-right: 1px solid #000000;
+        }
+
+        #conditions {
+            margin-bottom: 1em;
+        }
+
+        #algorithm {
+            margin-bottom: 1em;
+        }
+
+        #values {
+            margin-bottom: 1em;
+        }
+
+        p {
+            margin-top: 0.5em; /* Отступ сверху */
+            margin-bottom: 1em; /* Отступ снизу */
+        }
+    </style>
+</head>
+
+<body>
+
+<table class="canvasContainer">
+    <tr>
+        <td id="containerGreen">
+            <canvas class="canvas" id="Vectors3D-canvas" width="800" height="600"></canvas>
+        </td>
+        <td id="containerYellow" width=520>
+            <div id="conditions">
+                <p>Вычислить \begin{equation} \mathop {\lim }\limits_{x \to 1} \frac{{{x^4} - 1}}{{{x^3} - 4{x^2} +
+                    3x}}. \end{equation} Ответ дать с точностью до 2-го знака после запятой.</p>
+            </div>
+            <div id="algorithm">
+                <p>1. Подставим предельное значение в исследуемую функцию и определим вид неопределенности.
+                    Подстановка предельного значения $x = 1$ в функцию \begin{equation} f(x) = \frac{{{x^4} - 1}}{{{x^3}
+                    - 4{x^2} + 3x}} \end{equation} дает неопределенность $\left\{ \dfrac{0}{0} \right\}$.<br>
+                    $f(x)$ &mdash; дробно-рациональная функция, значение $x = 1$ является корнем многочленов, стоящих в
+                    числителе и знаменателе, следовательно, эти многочлены без остатка делятся на $x – 1$.
+                    2. Выделим в многочленах, стоящих в числителе и знаменателе, множитель $x - 1$:
+                    $${x^4} - 1 = ({x^2} - 1)({x^2} + 1) = (x - 1)(x + 1)({x^2} + 1),$$
+                    $${x^3} - 4{x^2} + 3x = x({x^2} - 4x + 3) = x(x - 1)(x + 3).$$
+                    3. Подставим преобразованные многочлены в функцию $f(x)$ $(2)$:
+                    $$\frac{{{x^4} - 1}}{{{x^3} - 4{x^2} + 3x}} = \frac{{(x - 1)(x + 1)({x^2} + 1)}}{{x(x - 1)(x -
+                    3)}}$$
+                    4. Разделим числитель и знаменатель на общий множитель $x - 1$:
+                    $$\frac{{(x - 1)(x + 1)({x^2} + 1)}}{{x(x - 1)(x - 3)}} = \frac{{(x + 1)({x^2} + 1)}}{{x(x - 3)}}$$
+                    5. Вычислим предел от преобразованной исследуемой функции $f(x) = \dfrac{{(x + 1)({x^2} + 1)}}{{x(x
+                    - 3)}}$:
+                    $$\mathop {\lim }\limits_{x \to 1} \frac{{(x + 1)({x^2} + 1)}}{{x(x - 3)}} = \frac{{2 \cdot 2}}{{1
+                    \cdot ( - 2)}} = - 2$$
+                    Таким образом, $$\mathop {\lim }\limits_{x \to 1} \frac{{{x^4} - 1}}{{{x^3} - 4{x^2} + 3x}} =
+                    -2.$$</p>
+            </div>
+            <div id="values">
+            </div>
+        </td>
+    </tr>
+</table>
+</body>
+
+</html>
